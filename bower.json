@@ -1,0 +1,19 @@
+{
+  "name": "bootstrap-deliteful",
+  "version": "0.0.0",
+  "authors": [
+    "Youcef Mammar <youcef.mammar@fr.ibm.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "deliteful": "~0.5.1"
+  }
+}
