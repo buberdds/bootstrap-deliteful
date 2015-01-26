@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap Deliteful - bootstrap-Select - again</title>
+
+		<!-- Bootstrap -->
+		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Delieful -->
+		<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+		<script type="text/javascript" src="../../requirejs/require.js"></script>
+		<script type="text/javascript">
+			require.config({
+				baseUrl: "../.."
+			});
+		</script>
+<script type="text/javascript">
+	require([
+			"delite/register",
+
+			"deliteful/Select",
+			"deliteful/Store",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+</head>
+<body>
+<div class="container">
+	<d-store id="myStore1"> 
+	{"text": "Option 1", "value": "1"},
+	{"text": "Option 2", "value": "2"},
+	{"text": "Option 3", "value": "3"},
+	{"text": "Option 4", "value": "4"},
+	{"text": "Option 5", "value": "5"},
+	{"text": "Option 6", "value": "6"},
+	{"text": "Option 7", "value": "7"},
+	{"text": "Option 8", "value": "8"},
+	{"text": "Option 9", "value": "9"},
+	{"text": "Option 10", "value": "10"},
+	{"text": "Option 11", "value": "11"},
+	{"text": "Option 12", "value": "12"},
+	{"text": "Option 13", "value": "13"}
+	</d-store>	
+
+	<d-store id="myStore2"> 
+	{"text": "Option 1", "value": "1"},
+	{"text": "Option 2", "value": "2"},
+	{"text": "Option 3", "value": "3", "disabled": true},
+	{"text": "Option 4", "value": "4"},
+	{"text": "Option 5", "value": "5"},
+	{"text": "Option 6", "value": "6"},
+	{"text": "Option 7", "value": "7"},
+	{"text": "Option 8", "value": "8"},
+	{"text": "Option 9", "value": "9"},
+	{"text": "Option 10", "value": "10"},
+	{"text": "Option 11", "value": "11"},
+	{"text": "Option 12", "value": "12"},
+	{"text": "Option 13", "value": "13"}
+	</d-store>	
+
+	<d-store id="myStore3"> 
+	{"text": "Option 1", "value": "1"},
+	{"text": "Option 2", "value": "2"},
+	{"text": "Option 3", "value": "3"},
+	{"text": "Option 4", "value": "4"},
+	{"text": "Option 5", "value": "5"},
+	{"text": "Option 6", "value": "6"},
+	{"text": "Option 7", "value": "7"},
+	{"text": "Option 8", "value": "8"},
+	{"text": "Option 9", "value": "9"},
+	{"text": "Option 10", "value": "10"},
+	{"text": "Option 11", "value": "11"},
+	{"text": "Option 12", "value": "12"},
+	{"text": "Option 13", "value": "13"}
+	</d-store>	
+	<h3>Single selection</h3>
+<div >
+
+			<select class="form-control">
+				<option value="Option 1"> Option 1 </option>
+				<option value="Option 2"> Option 2 </option>
+				<option value="Option 3"> Option 3 </option>
+				<option value="Option 4"> Option 4 </option>
+				<option value="Option 5"> Option 5 </option>
+				<option value="Option 6"> Option 6 </option>
+				<option value="Option 7"> Option 7 </option>
+				<option value="Option 8"> Option 8 </option>
+				<option value="Option 9"> Option 9 </option>
+			</select>
+	</div>
+	<div >
+
+			<select class="form-control">
+				<option value="Option 1"> Option 1 </option>
+				<option value="Option 2"> Option 2 </option>
+				<option disabled value="Option 3"> Option 3 </option>
+				<option value="Option 4"> Option 4 </option>
+				<option value="Option 5"> Option 5 </option>
+				<option value="Option 6"> Option 6 </option>
+				<option value="Option 7"> Option 7 </option>
+				<option value="Option 8"> Option 8 </option>
+				<option value="Option 9"> Option 9 </option>
+			</select>
+	</div>
+	<div>
+			<select class="form-control" disabled>
+				<option value="Option 1"> Option 1 </option>
+				<option value="Option 2"> Option 2 </option>
+				<option value="Option 3"> Option 3 </option>
+				<option value="Option 4"> Option 4 </option>
+				<option value="Option 5"> Option 5 </option>
+				<option value="Option 6"> Option 6 </option>
+				<option value="Option 7"> Option 7 </option>
+				<option value="Option 8"> Option 8 </option>
+				<option value="Option 9"> Option 9 </option>
+			</select>
+
+	</div>
+	<h3>Multiple selection</h3>
+<div >
+
+			<select multiple class="form-control">
+				<option value="Option 1"> Option 1 </option>
+				<option value="Option 2"> Option 2 </option>
+				<option value="Option 3"> Option 3 </option>
+				<option value="Option 4"> Option 4 </option>
+				<option value="Option 5"> Option 5 </option>
+				<option value="Option 6"> Option 6 </option>
+				<option value="Option 7"> Option 7 </option>
+				<option value="Option 8"> Option 8 </option>
+				<option value="Option 9"> Option 9 </option>
+			</select>
+	</div>
+	<div >
+
+			<select multiple class="form-control">
+				<option value="Option 1"> Option 1 </option>
+				<option value="Option 2"> Option 2 </option>
+				<option disabled value="Option 3"> Option 3 </option>
+				<option value="Option 4"> Option 4 </option>
+				<option value="Option 5"> Option 5 </option>
+				<option value="Option 6"> Option 6 </option>
+				<option value="Option 7"> Option 7 </option>
+				<option value="Option 8"> Option 8 </option>
+				<option value="Option 9"> Option 9 </option>
+			</select>
+	</div>
+	<div>
+		<select multiple class="form-control" disabled>
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+
+	</div>
+
+
+
+
+	<h3>Basic forms</h3>
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+		</div>
+		<div class="form-group">
+			<label>
+				<select class="form-control">
+					<option value="Option 1"> Option 1 </option>
+					<option value="Option 2"> Option 2 </option>
+					<option value="Option 3"> Option 3 </option>
+					<option value="Option 4"> Option 4 </option>
+					<option value="Option 5"> Option 5 </option>
+					<option value="Option 6"> Option 6 </option>
+					<option value="Option 7"> Option 7 </option>
+					<option value="Option 8"> Option 8 </option>
+					<option value="Option 9"> Option 9 </option>
+				</select>
+			</label>
+		</div>
+
+		<div class="form-group">
+			<label>
+				<select multiple class="form-control">
+					<option value="Option 1"> Option 1 </option>
+					<option value="Option 2"> Option 2 </option>
+					<option value="Option 3"> Option 3 </option>
+					<option value="Option 4"> Option 4 </option>
+					<option value="Option 5"> Option 5 </option>
+					<option value="Option 6"> Option 6 </option>
+					<option value="Option 7"> Option 7 </option>
+					<option value="Option 8"> Option 8 </option>
+					<option value="Option 9"> Option 9 </option>
+				</select>
+			</label>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+	<h3>Inline forms</h3>
+	<form class="form-inline">
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputEmail2">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputPassword2">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+		</div>
+
+
+			<label>
+				<select  class="form-control">
+					<option value="Option 1"> Option 1 </option>
+					<option value="Option 2"> Option 2 </option>
+					<option value="Option 3"> Option 3 </option>
+					<option value="Option 4"> Option 4 </option>
+					<option value="Option 5"> Option 5 </option>
+					<option value="Option 6"> Option 6 </option>
+					<option value="Option 7"> Option 7 </option>
+					<option value="Option 8"> Option 8 </option>
+					<option value="Option 9"> Option 9 </option>
+				</select>
+			</label>
+
+			<button type="submit" class="btn btn-default">Sign in</button>
+	</form>
+	<h3>Validation states</h3> 
+	<!-- try also radio, switches, radiobuttons -->   
+
+	<div class="has-success">
+		<label>
+		<select class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+	</label>
+	</div>
+	<div class="has-error">
+		<label>
+		<select class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+	</label>
+	</div>
+	<div class="has-warning">
+		<label>
+		<select class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+	</label>
+	</div>
+	<div class="has-success">
+		<label>
+		<select multiple class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+	</label>
+	</div>
+	<div class="has-error">
+		<label>
+		<select multiple class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+	</label>
+	</div>
+	<div class="has-warning">
+		<label>
+		<select multiple class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+	</label>
+	</div>
+
+	<h3>sizing</h3>
+
+	<select class="form-control input-lg">
+		<option value="Option 1"> Option 1 </option>
+		<option value="Option 2"> Option 2 </option>
+		<option value="Option 3"> Option 3 </option>
+		<option value="Option 4"> Option 4 </option>
+		<option value="Option 5"> Option 5 </option>
+		<option value="Option 6"> Option 6 </option>
+		<option value="Option 7"> Option 7 </option>
+		<option value="Option 8"> Option 8 </option>
+		<option value="Option 9"> Option 9 </option>
+	</select>
+
+
+	<select class="form-control input-default">
+		<option value="Option 1"> Option 1 </option>
+		<option value="Option 2"> Option 2 </option>
+		<option value="Option 3"> Option 3 </option>
+		<option value="Option 4"> Option 4 </option>
+		<option value="Option 5"> Option 5 </option>
+		<option value="Option 6"> Option 6 </option>
+		<option value="Option 7"> Option 7 </option>
+		<option value="Option 8"> Option 8 </option>
+		<option value="Option 9"> Option 9 </option>
+	</select>
+
+
+	<select class="form-control input-sm">
+		<option value="Option 1"> Option 1 </option>
+		<option value="Option 2"> Option 2 </option>
+		<option value="Option 3"> Option 3 </option>
+		<option value="Option 4"> Option 4 </option>
+		<option value="Option 5"> Option 5 </option>
+		<option value="Option 6"> Option 6 </option>
+		<option value="Option 7"> Option 7 </option>
+		<option value="Option 8"> Option 8 </option>
+		<option value="Option 9"> Option 9 </option>
+	</select>
+
+</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

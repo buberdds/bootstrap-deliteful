@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap Deliteful - bootstrap-ScrollableContainer - again</title>
+
+		<!-- Bootstrap -->
+		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Delieful -->
+		<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+		<script type="text/javascript" src="../../requirejs/require.js"></script>
+		<script type="text/javascript">
+			require.config({
+				baseUrl: "../.."
+			});
+		</script>
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/ScrollableContainer",
+			"deliteful/Button",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+</head>
+<body>
+<style>
+	.col-md-4, 
+	.col-md-6 { 
+		border: 1px white solid; 
+		background: rgba(255, 99, 70, .3);
+	}
+	.d-side-pane {
+		background:  rgba(158, 208, 55, .3);
+	}
+	.bd-controls {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
+</style>
+<div class="container">
+	<h3>ScrollableContainer inside a grid</h3>
+	<div class="row">
+		<div class="col-md-4"> 
+			<d-scrollable-container scrollDirection="both" style="height: 6em">
+			<div>item 1</div> <div>item 2</div> <div>item 3</div> <div>item 4</div> <div>item 5</div> <div>item 6</div> <div>item 7</div> <div>item 8</div> <div>item 9</div> <div>item 10</div> <div>item 11</div> <div>item 12</div> <div>item 13</div> <div>item 14</div> <div>item 15</div> <div>item 16</div> <div>item 17</div> <div>item 18</div> <div>item 19</div> <div>item 20</div> <div>item 21</div> <div>item 22</div> <div>item 23</div> <div>item 24</div> <div>item 25</div> <div>item 26</div> <div>item 27</div> <div>item 28</div> <div>item 29</div> <div>item 30</div> <div>item 31</div> <div>item 32</div> <div>item 33</div> <div>item 34</div> <div>item 35</div> <div>item 36</div> <div>item 37</div> <div>item 38</div> <div>item 39</div> <div>item 40</div> <div>item 41</div> <div>item 42</div> <div>item 43</div> <div>item 44</div> <div>item 45</div> <div>item 46</div> <div>item 47</div> <div>item 48</div> <div>item 49</div> <div>item 50</div> <div>item 51</div> <div>item 52</div> <div>item 53</div> <div>item 54</div> <div>item 55</div> <div>item 56</div> <div>item 57</div> <div>item 58</div> <div>item 59</div> <div>item 60</div> <div>item 61</div> <div>item 62</div> <div>item 63</div> <div>item 64</div> <div>item 65</div> <div>item 66</div> <div>item 67</div> <div>item 68</div> <div>item 69</div> <div>item 70</div> <div>item 71</div> <div>item 72</div> <div>item 73</div> <div>item 74</div> <div>item 75</div> <div>item 76</div> <div>item 77</div> <div>item 78</div> <div>item 79</div> <div>item 80</div> <div>item 81</div> <div>item 82</div> <div>item 83</div> <div>item 84</div> <div>item 85</div> <div>item 86</div> <div>item 87</div> <div>item 88</div> <div>item 89</div> <div>item 90</div> <div>item 91</div> <div>item 92</div> <div>item 93</div> <div>item 94</div> <div>item 95</div> <div>item 96</div> <div>item 97</div> <div>item 98</div> <div>item 99</div> <div>item 100</div>
+			</d-scrollable-container>
+		</div>
+		<div class="col-md-4">.col-md-4</div>
+		<div class="col-md-4">.col-md-4</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<d-scrollable-container scrollDirection="both" style="height: 6em">
+			<div>item 1</div> <div>item 2</div> <div>item 3</div> <div>item 4</div> <div>item 5</div> <div>item 6</div> <div>item 7</div> <div>item 8</div> <div>item 9</div> <div>item 10</div> <div>item 11</div> <div>item 12</div> <div>item 13</div> <div>item 14</div> <div>item 15</div> <div>item 16</div> <div>item 17</div> <div>item 18</div> <div>item 19</div> <div>item 20</div> <div>item 21</div> <div>item 22</div> <div>item 23</div> <div>item 24</div> <div>item 25</div> <div>item 26</div> <div>item 27</div> <div>item 28</div> <div>item 29</div> <div>item 30</div> <div>item 31</div> <div>item 32</div> <div>item 33</div> <div>item 34</div> <div>item 35</div> <div>item 36</div> <div>item 37</div> <div>item 38</div> <div>item 39</div> <div>item 40</div> <div>item 41</div> <div>item 42</div> <div>item 43</div> <div>item 44</div> <div>item 45</div> <div>item 46</div> <div>item 47</div> <div>item 48</div> <div>item 49</div> <div>item 50</div> <div>item 51</div> <div>item 52</div> <div>item 53</div> <div>item 54</div> <div>item 55</div> <div>item 56</div> <div>item 57</div> <div>item 58</div> <div>item 59</div> <div>item 60</div> <div>item 61</div> <div>item 62</div> <div>item 63</div> <div>item 64</div> <div>item 65</div> <div>item 66</div> <div>item 67</div> <div>item 68</div> <div>item 69</div> <div>item 70</div> <div>item 71</div> <div>item 72</div> <div>item 73</div> <div>item 74</div> <div>item 75</div> <div>item 76</div> <div>item 77</div> <div>item 78</div> <div>item 79</div> <div>item 80</div> <div>item 81</div> <div>item 82</div> <div>item 83</div> <div>item 84</div> <div>item 85</div> <div>item 86</div> <div>item 87</div> <div>item 88</div> <div>item 89</div> <div>item 90</div> <div>item 91</div> <div>item 92</div> <div>item 93</div> <div>item 94</div> <div>item 95</div> <div>item 96</div> <div>item 97</div> <div>item 98</div> <div>item 99</div> <div>item 100</div>
+			</d-scrollable-container>
+		</div>
+		<div class="col-md-6">.col-md-6</div>
+	</div>
+	<h3>ScrollableContainer mixed with <a href="http://getbootstrap.com/components/#list-group">List Group</a></h3>
+	<div class="row">
+		<div class="col-md-12">
+			<d-scrollable-container scrollDirection="both" style="height: 300px" class="list-group">
+			<div class="list-group-item">item 1</div> <div class="list-group-item">item 2</div> <div class="list-group-item">item 3</div> <div class="list-group-item">item 4</div> <div class="list-group-item">item 5</div> <div class="list-group-item">item 6</div> <div class="list-group-item">item 7</div> <div class="list-group-item">item 8</div> <div class="list-group-item">item 9</div> <div class="list-group-item">item 10</div> <div class="list-group-item">item 11</div> <div class="list-group-item">item 12</div> <div class="list-group-item">item 13</div> <div class="list-group-item">item 14</div> <div class="list-group-item">item 15</div> <div class="list-group-item">item 16</div> <div class="list-group-item">item 17</div> <div class="list-group-item">item 18</div> <div class="list-group-item">item 19</div> <div class="list-group-item">item 20</div> <div class="list-group-item">item 21</div> <div class="list-group-item">item 22</div> <div class="list-group-item">item 23</div> <div class="list-group-item">item 24</div> <div class="list-group-item">item 25</div> <div class="list-group-item">item 26</div> <div class="list-group-item">item 27</div> <div class="list-group-item">item 28</div> <div class="list-group-item">item 29</div> <div class="list-group-item">item 30</div> <div class="list-group-item">item 31</div> <div class="list-group-item">item 32</div> <div class="list-group-item">item 33</div> <div class="list-group-item">item 34</div> <div class="list-group-item">item 35</div> <div class="list-group-item">item 36</div> <div class="list-group-item">item 37</div> <div class="list-group-item">item 38</div> <div class="list-group-item">item 39</div> <div class="list-group-item">item 40</div> <div class="list-group-item">item 41</div> <div class="list-group-item">item 42</div> <div class="list-group-item">item 43</div> <div class="list-group-item">item 44</div> <div class="list-group-item">item 45</div> <div class="list-group-item">item 46</div> <div class="list-group-item">item 47</div> <div class="list-group-item">item 48</div> <div class="list-group-item">item 49</div> <div class="list-group-item">item 50</div> <div class="list-group-item">item 51</div> <div class="list-group-item">item 52</div> <div class="list-group-item">item 53</div> <div class="list-group-item">item 54</div> <div class="list-group-item">item 55</div> <div class="list-group-item">item 56</div> <div class="list-group-item">item 57</div> <div class="list-group-item">item 58</div> <div class="list-group-item">item 59</div> <div class="list-group-item">item 60</div> <div class="list-group-item">item 61</div> <div class="list-group-item">item 62</div> <div class="list-group-item">item 63</div> <div class="list-group-item">item 64</div> <div class="list-group-item">item 65</div> <div class="list-group-item">item 66</div> <div class="list-group-item">item 67</div> <div class="list-group-item">item 68</div> <div class="list-group-item">item 69</div> <div class="list-group-item">item 70</div> <div class="list-group-item">item 71</div> <div class="list-group-item">item 72</div> <div class="list-group-item">item 73</div> <div class="list-group-item">item 74</div> <div class="list-group-item">item 75</div> <div class="list-group-item">item 76</div> <div class="list-group-item">item 77</div> <div class="list-group-item">item 78</div> <div class="list-group-item">item 79</div> <div class="list-group-item">item 80</div> <div class="list-group-item">item 81</div> <div class="list-group-item">item 82</div> <div class="list-group-item">item 83</div> <div class="list-group-item">item 84</div> <div class="list-group-item">item 85</div> <div class="list-group-item">item 86</div> <div class="list-group-item">item 87</div> <div class="list-group-item">item 88</div> <div class="list-group-item">item 89</div> <div class="list-group-item">item 90</div> <div class="list-group-item">item 91</div> <div class="list-group-item">item 92</div> <div class="list-group-item">item 93</div> <div class="list-group-item">item 94</div> <div class="list-group-item">item 95</div> <div class="list-group-item">item 96</div> <div class="list-group-item">item 97</div> <div class="list-group-item">item 98</div> <div class="list-group-item">item 99</div> <div class="list-group-item">item 100</div>
+			</d-scrollable-container>
+		</div>
+	</div>
+</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
