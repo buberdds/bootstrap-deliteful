@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap Deliteful - deliteful-List-PageableList - again</title>
+
+		<!-- Bootstrap -->
+		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Delieful -->
+		<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+		<script type="text/javascript" src="../../requirejs/require.js"></script>
+		<script type="text/javascript">
+			require.config({
+				baseUrl: "../.."
+			});
+		</script>
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/Store",
+			"deliteful/list/List",
+			"deliteful/list/PageableList",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+<style type="text/css" media="all">
+	.col-md-4, 
+	.col-md-6 { 
+		border: 1px white solid; 
+		background: rgba(255, 99, 70, .3);
+	}
+</style>
+</head>
+<body>
+<div class="container">
+	<h3>Basic</h3>
+
+	<d-store id="mystore">
+	{"label": "Cras justo odio" },
+	{"label": "Dapibus ac facilisis in" },
+	{"label": "Morbi leo risus" },
+	{"label": "Porta ac consectetur ac" },
+	{"label": "Vestibulum at eros" }
+	</d-store>
+	<d-list store="mystore" selectionMode="single"></d-list>
+
+	<h3>inside a panel</h3>
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">Panel heading</div>
+		<div class="panel-body">
+			<p>Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+		</div>
+
+		<!-- List group -->
+		<d-list store="mystore" selectionMode="single"></d-list>
+	</div>
+
+	<h3> inside a grid </h3>
+	<div class="row">
+		<div class="col-md-4"> 
+			<d-list store="mystore" selectionMode="single"></d-list>
+		</div>
+		<div class="col-md-4">.col-md-4</div>
+		<div class="col-md-4">.col-md-4</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<d-list store="mystore" selectionMode="single"></d-list>
+		</div>
+		<div class="col-md-6">.col-md-6</div>
+	</div>
+<!--
+	<h3> A pageable </h3>
+	<d-store id="mybigstore">
+	{"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Cras justo odio" }, {"label": "Dapibus ac facilisis in" }, {"label": "Morbi leo risus" }, {"label": "Porta ac consectetur ac" }, {"label": "Vestibulum at eros" }
+	</d-store>
+	<d-pageable-list store="mybigstore" pageLength="5" ></d-pageable-list>
+-->
+
+
+
+</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

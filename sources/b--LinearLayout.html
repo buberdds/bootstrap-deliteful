@@ -1,0 +1,105 @@
+{{#extend "layout"}}
+{{#content "head" mode="append"}}
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/LinearLayout",
+			"deliteful/Button",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+{{/content}}
+
+{{#content "body"}}
+<style>
+	.col-md-4, 
+	.col-md-6 { 
+		border: 1px white solid; 
+		background: rgba(255, 99, 70, .3);
+	}
+	.d-side-pane {
+		background:  rgba(158, 208, 55, .3);
+	}
+	.bd-controls {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
+	.red { background-color: #D9534F; }
+	.blue { background-color: #5BC0DE; }
+	.green { background-color: #5CB85C;}
+</style>
+<h3>
+	Horizontal
+</h3>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4"> 
+			<d-linear-layout vertical="false" style="width: 100%; border: solid 1px black">    
+				<div class="blue" style="width:30%">30%</div>
+				<div class="green fill">fill</div>
+				<div class="red">auto</div>
+			</d-linear-layout> 
+		</div>
+		<div class="col-md-4">.col-md-4</div>
+		<div class="col-md-4">.col-md-4</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<d-linear-layout vertical="false" style="width: 100%; border: solid 1px black">    
+				<div class="blue" style="width:30%">30%</div>
+				<div class="green fill">fill</div>
+				<div class="red">auto</div>
+			</d-linear-layout>	
+		</div>
+		<div class="col-md-6">.col-md-6</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
+		</div>
+	</div>
+</div>
+<h3>
+	Vertical
+</h3>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4"> 
+			<d-linear-layout vertical="true" style="width: 100%; border: solid 1px black">    
+				<div class="blue" style="width:30%">30%</div>
+				<div class="green fill">fill</div>
+				<div class="red">auto</div>
+			</d-linear-layout> 
+		</div>
+		<div class="col-md-4">.col-md-4</div>
+		<div class="col-md-4">.col-md-4</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<d-linear-layout vertical="true" style="width: 100%; border: solid 1px black">    
+				<div class="blue" style="width:30%">30%</div>
+				<div class="green fill">fill</div>
+				<div class="red">auto</div>
+			</d-linear-layout>	
+		</div>
+		<div class="col-md-6">.col-md-6</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
+		</div>
+	</div>
+</div>
+{{/content}}
+
+{{#content "foot" mode="prepend"}}
+{{/content}}
+{{/extend}}

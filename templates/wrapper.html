@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Bootstrap Deliteful - {{title}} - again</title>
+
+	<!-- Bootstrap -->
+	<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Delieful -->
+	<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+	<script type="text/javascript" src="../../requirejs/require.js"></script>
+	<script type="text/javascript">
+		require.config({
+			baseUrl: "../.."
+		});
+	</script>
+	<style>
+		.hidden {
+			display: none;
+		}
+		.current {
+			background: black;
+			color: white;
+		}
+		a {
+			padding: .5em;
+			display: inline-block;
+		}
+		.label {
+			position: absolute;
+		}
+	</style>
+</head>
+<body style="height: 95%">
+	<header>
+	{{#each pages}}
+	<a href="{{this.url}}" class="{{#if this.current }}current{{/if}}" >{{@key}}</a>
+	{{/each}}
+	</header>
+
+	{{#if current_page.deliteful}}
+	<span class="label label-default">bootstrap widget</span>
+	<iframe style="width: 49%; height: 100%" src="{{current_page.bootstrap}}"></iframe>
+	<span class="label label-primary">deliteful widget</span>
+	<iframe style="width: 49%; height: 100%" src="{{current_page.deliteful}}"></iframe>
+	{{else}}
+	<iframe style="width: 100%; height: 100%" src="{{current_page.bootstrap}}"></iframe>
+	{{/if}}
+</body>
+</html>

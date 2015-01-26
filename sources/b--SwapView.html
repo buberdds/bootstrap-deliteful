@@ -1,0 +1,110 @@
+{{#extend "layout"}}
+{{#content "head" mode="append"}}
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/ViewStack",
+			"deliteful/Button",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+		</script>
+		{{/content}}
+
+		{{#content "body"}}
+		<style>
+			.col-md-4, 
+			.col-md-6 { 
+				border: 1px white solid; 
+				background: rgba(255, 99, 70, .3);
+			}
+			.d-side-pane {
+				background:  rgba(158, 208, 55, .3);
+			}
+			.bd-controls {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				text-align: center;
+			}
+			.tomato {background-color: tomato}
+			.yellowgreen {background-color: yellowgreen}
+			.amethyst {background-color: #9B59B6}
+		</style>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4"> 
+					<d-view-stack id="a" style="width:100%; height:200px">
+					<div id="a1" class="tomato">Child 1 (Default visible child)</div>
+					<div id="a2" class="yellowgreen" >Child 2</div>
+					<div id="a3" class="amethyst">Child 3</div>
+					</d-view-stack>
+				</div>
+				<div class="col-md-4">.col-md-4</div>
+				<div class="col-md-4">.col-md-4</div>
+			</div>
+			<nav>
+				<ul class="pagination">
+					<li>
+						<a href="#" onclick="a.showPrevious()" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li><a href="#" onclick="a.show('a1')">1</a></li>
+					<li><a href="#" onclick="a.show('a2')">2</a></li>
+					<li><a href="#" onclick="a.show('a3')">3</a></li>
+					<li>
+						<a href="#" onclick="a.showNext()" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<nav>
+				<ul class="pager">
+					<li><a href="#" onclick="a.showPrevious()">Previous</a></li>
+					<li><a href="#" onclick="a.showNext()">Next</a></li>
+				</ul>
+			</nav>
+			<div class="row">
+				<div class="col-md-6">
+					<d-view-stack id="b" style="width:100%; height:200px">
+					<div id="b1" class="tomato">Child 1 (Default visible child)</div>
+					<div id="b2" class="yellowgreen">Child 2</div>
+					<div id="b3" class="amethyst">Child 3</div>
+					</d-view-stack>
+				</div>
+				<div class="col-md-6">.col-md-6</div>
+			</div>
+			<nav>
+				<ul class="pagination">
+					<li>
+						<a href="#" onclick="b.showPrevious()" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li><a href="#" onclick="b.show('b1')">1</a></li>
+					<li><a href="#" onclick="b.show('b2')">2</a></li>
+					<li><a href="#" onclick="b.show('b3')">3</a></li>
+					<li>
+						<a href="#" onclick="b.showNext()" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<nav>
+				<ul class="pager">
+					<li><a href="#" onclick="b.showPrevious()">Previous</a></li>
+					<li><a href="#" onclick="b.showNext()">Next</a></li>
+				</ul>
+			</nav>
+		</div>
+		{{/content}}
+
+		{{#content "foot" mode="prepend"}}
+		{{/content}}
+		{{/extend}}

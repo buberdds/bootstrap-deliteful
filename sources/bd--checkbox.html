@@ -1,0 +1,168 @@
+{{#extend "layout"}}
+{{#content "head" mode="append"}}
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/Checkbox",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+		</script>
+		{{/content}}
+
+		{{#content "body"}}
+		<div class="container">
+			<h3>Stacked</h3>
+			<div class="checkbox">
+				<label>
+					{{#if deliteful}}
+					<d-checkbox></d-checkbox> 
+					{{^}}
+					<input type="checkbox" >
+					{{/if}}
+					Option 1
+				</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					{{#if deliteful}}
+					<d-checkbox checked></d-checkbox> 
+					{{^}}
+					<input type="checkbox" checked>
+					{{/if}}
+					Option 2
+				</label>
+			</div>
+			<div class="checkbox disabled">
+				<label>
+					{{#if deliteful}}
+					<d-checkbox disabled></d-checkbox> 
+					{{^}}
+					<input type="checkbox" disabled>
+					{{/if}}
+					Option 3
+				</label>
+			</div>
+			<h3>Inline</h3>
+			<label class="checkbox-inline">
+				{{#if deliteful}}
+				<d-checkbox ></d-checkbox> 
+				{{^}}
+				<input type="checkbox" >
+				{{/if}}
+				Option 1
+			</label>
+			<label class="checkbox-inline">
+				{{#if deliteful}}
+				<d-checkbox checked></d-checkbox> 
+				{{^}}
+				<input type="checkbox" checked>
+				{{/if}}
+				Option 2
+			</label>
+			<label class="checkbox-inline">
+				{{#if deliteful}}
+				<d-checkbox disabled></d-checkbox> 
+				{{^}}
+				<input type="checkbox" disabled>
+				{{/if}}
+				Option 3
+			</label>
+
+			<h3>Basic forms</h3>
+			<form>
+				<div class="form-group">
+					<label for="exampleInputEmail1">Email address</label>
+					<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Password</label>
+					<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+				</div>
+				<div class="checkbox">
+					<label>
+						{{#if deliteful}}
+						<d-checkbox></d-checkbox> Check me out
+						{{^}}
+						<input type="checkbox"> Check me out
+						{{/if}}
+					</label>
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			</form>
+			<h3>Inline forms</h3>
+			<form class="form-inline">
+				<div class="form-group">
+					<label class="sr-only" for="exampleInputEmail2">Email address</label>
+					<input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="exampleInputPassword2">Password</label>
+					<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox"> Remember me
+					</label>
+				</div>
+				<button type="submit" class="btn btn-default">Sign in</button>
+			</form>
+			<h3>Validation states</h3>
+			<!-- try also checkbox, switches, radiobuttons -->
+			<div class="has-success">
+				<div class="checkbox">
+					<label>
+						{{#if deliteful}}
+						<d-checkbox></d-checkbox>
+						{{^}}
+						<input type="checkbox" id="checkboxSuccess" value="option1"> 
+						{{/if}}
+						Checkbox with success
+					</label>
+				</div>
+			</div>
+			<div class="has-warning">
+				<div class="checkbox">
+					<label>
+						{{#if deliteful}}
+						<d-checkbox></d-checkbox>
+						{{^}}
+						<input type="checkbox" id="checkboxWarning" value="option1">
+						{{/if}}
+						Checkbox with warning
+					</label>
+				</div>
+			</div>
+			<div class="has-error">
+				<div class="checkbox">
+					<label>
+						{{#if deliteful}}
+						<d-checkbox></d-checkbox>
+						{{^}}
+						<input type="checkbox" id="checkboxError" value="option1">
+						{{/if}}
+						Checkbox with error
+
+					</label>
+				</div>
+			</div>
+
+
+			<h3>sizing</h3>
+			<select class="form-control input-lg">
+				<option value="">.input-lg</option>
+			</select>
+			<select class="form-control">
+				<option value="">Default select</option>
+			</select>
+			<select class="form-control input-sm">
+				<option value="">.input-sm</option>
+			</select>
+		</div>
+		{{/content}}
+
+		{{#content "foot" mode="prepend"}}
+		{{/content}}
+		{{/extend}}

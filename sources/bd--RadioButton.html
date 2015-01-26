@@ -1,0 +1,200 @@
+{{#extend "layout"}}
+{{#content "head" mode="append"}}
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/RadioButton",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+{{/content}}
+
+{{#content "body"}}
+<div class="container">
+	<h3>Stacked</h3>
+	<div class="radio">
+		<label>
+			{{#if deliteful}}
+			<d-radio-button></d-radio-button> 
+			{{^}}
+			<input type="radio" >
+			{{/if}}
+			Option 1
+		</label>
+	</div>
+	<div class="radio">
+		<label>
+			{{#if deliteful}}
+			<d-radio-button checked></d-radio-button> 
+			{{^}}
+			<input type="radio" checked>
+			{{/if}}
+			Option 2
+		</label>
+	</div>
+	<div class="radio disabled">
+		<label>
+			{{#if deliteful}}
+			<d-radio-button disabled></d-radio-button> 
+			{{^}}
+			<input type="radio" disabled>
+			{{/if}}
+			Option 3
+		</label>
+	</div>
+	<h3>Inline</h3>
+	<label class="radio-inline">
+		{{#if deliteful}}
+		<d-radio-button ></d-radio-button> 
+		{{^}}
+		<input type="radio" >
+		{{/if}}
+		Option 1
+	</label>
+	<label class="radio-inline">
+		{{#if deliteful}}
+		<d-radio-button checked></d-radio-button> 
+		{{^}}
+		<input type="radio" checked>
+		{{/if}}
+		Option 2
+	</label>
+	<label class="radio-inline">
+		{{#if deliteful}}
+		<d-radio-button disabled></d-radio-button> 
+		{{^}}
+		<input type="radio" disabled>
+		{{/if}}
+		Option 3
+	</label>
+	<h3>Basic forms</h3>
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+		</div>
+		<div class="radio">
+			<label>
+				{{#if deliteful}}
+				<div class="radio">
+					<label><d-radio-button name="optionsRadios" checked="true"></d-radio-button> Check me out</label>
+				</div>
+				<div class="radio">
+					<label><d-radio-button name="optionsRadios" disabled></d-radio-button> Check me out</label>
+				</div>
+				<div class="radio">
+					<label><d-radio-button name="optionsRadios"></d-radio-button> Check me out</label>
+				</div>
+				{{^}}
+				<div class="radio">
+					<label><input type="radio" name="optionsRadios" value="option1" checked> Check me out</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optionsRadios" value="option2" disabled> Check me out</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optionsRadios" value="option3"> Check me out</label>
+				</div>
+				{{/if}}
+			</label>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+	<h3>Inline forms</h3>
+	<form class="form-inline">
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputEmail2">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputPassword2">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+		</div>
+		{{#if deliteful}}
+		<div class="radio">
+			<label><d-radio-button name="optionsRadios" checked="true"></d-radio-button> Check me out</label>
+		</div>
+		<div class="radio">
+			<label><d-radio-button name="optionsRadios"></d-radio-button> Check me out</label>
+		</div>
+		<div class="radio">
+			<label><d-radio-button name="optionsRadios"></d-radio-button> Check me out</label>
+		</div>
+		{{^}}
+		<div class="radio">
+			<label><input type="radio" name="optionsRadios" value="option1" checked> Check me out</label>
+		</div>
+		<div class="radio">
+			<label><input type="radio" name="optionsRadios" value="option2"> Check me out</label>
+		</div>
+		<div class="radio">
+			<label><input type="radio" name="optionsRadios" value="option3"> Check me out</label>
+		</div>
+		{{/if}}
+		<button type="submit" class="btn btn-default">Sign in</button>
+	</form>
+	<h3>Validation states</h3> 
+	<!-- try also radio, switches, radiobuttons -->   
+	<div class="has-success">
+		<div class="radio">
+			{{#if deliteful}}
+			<div class="radio">
+				<label><d-radio-button name="optionsRadios" checked="true" checked></d-radio-button>Radio with success</label>
+			</div>
+			{{^}}
+			<div class="radio">
+				<label><input type="radio" name="optionsRadios" value="option1" checked>Radio with success</label>
+			</div>
+			{{/if}}
+		</div>
+	</div>
+	<div class="has-warning">
+		<div class="radio">
+			{{#if deliteful}}
+			<div class="radio">
+				<label><d-radio-button name="optionsRadios" checked="true" checked></d-radio-button>Radio with warning</label>
+			</div>
+			{{^}}
+			<div class="radio">
+				<label><input type="radio" name="optionsRadios" value="option1" checked>Radio with warning</label>
+			</div>
+			{{/if}}
+		</div>
+	</div>
+	<div class="has-error"> 
+		<div class="radio">
+			{{#if deliteful}}
+			<div class="radio">
+				<label><d-radio-button name="optionsRadios" checked="true" checked></d-radio-button> Radio with error</label>
+			</div>
+			{{^}}
+			<div class="radio">
+				<label><input type="radio" name="optionsRadios" value="option1" checked> Radio with error</label>
+			</div>
+			{{/if}}
+
+		</div>
+	</div>
+	<h3>sizing</h3>
+	<select class="form-control input-lg">
+		<option value="">.input-lg</option>
+	</select>
+	<select class="form-control">
+		<option value="">Default select</option>
+	</select>
+	<select class="form-control input-sm">
+		<option value="">.input-sm</option>
+	</select>
+</div>
+{{/content}}
+
+{{#content "foot" mode="prepend"}}
+{{/content}}
+{{/extend}}

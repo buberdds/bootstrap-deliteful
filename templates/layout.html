@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+    {{#block "head"}}
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap Deliteful - {{title}} - again</title>
+
+		<!-- Bootstrap -->
+		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Delieful -->
+		<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+		<script type="text/javascript" src="../../requirejs/require.js"></script>
+		<script type="text/javascript">
+			require.config({
+				baseUrl: "../.."
+			});
+		</script>
+    {{/block}}
+</head>
+<body>
+	{{#block "body"}}
+
+	{{/block}}
+
+    {{#block "foot"}}
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    {{/block}}
+</body>
+</html>

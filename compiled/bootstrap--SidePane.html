@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap Deliteful - bootstrap-sidepane - again</title>
+
+		<!-- Bootstrap -->
+		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Delieful -->
+		<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+		<script type="text/javascript" src="../../requirejs/require.js"></script>
+		<script type="text/javascript">
+			require.config({
+				baseUrl: "../.."
+			});
+		</script>
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/SidePane",
+			"deliteful/Button",
+			"delite/theme!delite/themes/global.css",	// page level CSS
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+</head>
+<body>
+<style>
+	.col-md-4, 
+	.col-md-6 { 
+		border: 1px white solid; 
+		background: rgba(255, 99, 70, .3);
+	}
+	.d-side-pane {
+		background:  rgba(158, 208, 55, .3);
+	}
+	.bd-controls {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
+</style>
+<d-side-pane id="sidepaneOverlayOutside" mode="overlay">
+overlay
+</d-side-pane>
+<d-side-pane id="sidepanePushOutside" mode="push">
+push
+</d-side-pane>
+<div class="container">
+	<div class="row">
+		<d-side-pane id="sidepanepushInside" mode="push">
+		push mini
+		</d-side-pane>
+		<div class="col-md-4">.col-md-4 </div>
+		<div class="col-md-4">.col-md-4</div>
+		<div class="col-md-4">.col-md-4</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">.col-md-6</div>
+		<div class="col-md-6">.col-md-6</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
+		</div>
+	</div>
+</div>
+<div class="bd-controls">
+	<button onclick="sidepaneOverlayOutside.toggle()"> toggle outer sidepane as overlay </button>
+	<button onclick="sidepanePushOutside.toggle()"> toggle outer sidepane as push </button>
+	<button onclick="sidepanepushInside.toggle()"> toggle inner sidepane as push </button>
+</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

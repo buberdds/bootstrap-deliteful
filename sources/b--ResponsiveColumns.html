@@ -1,0 +1,68 @@
+{{#extend "layout"}}
+{{#content "head" mode="append"}}
+<script type="text/javascript">
+	require([
+			"delite/register",
+			"deliteful/ResponsiveColumns",
+			"deliteful/Button",
+			"delite/theme!delite/themes/global.css",	// page level CSS
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+{{/content}}
+
+{{#content "body"}}
+<style>
+	.col-md-4, 
+	.col-md-6 { 
+		border: 1px white solid; 
+		background: rgba(255, 99, 70, .3);
+	}
+	.d-side-pane {
+		background:  rgba(158, 208, 55, .3);
+	}
+	.bd-controls {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
+</style>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4"> 
+			<d-responsive-columns breakpoints="{phone: '500px', other: ''}" title="inside a grid column"> <!-- inside a grid column -->
+			<div layout="{phone: '100%', other: '20%'}" style="background: #333; width: 100%">...</div>
+			<div layout="{phone: 'hidden', other: 'fill'}" style="background: tomato; width: 50%">...</div>
+			</d-responsive-columns>
+		</div>
+		<div class="col-md-4">.col-md-4</div>
+		<div class="col-md-4">.col-md-4</div>
+	</div>
+	<d-responsive-columns breakpoints="{phone: '500px', other: ''}" title="inside a container"> <!-- inside a container -->
+	<div layout="{phone: '100%', other: '20%'}" style="background: #333; width: 100%">...</div>
+	<div layout="{phone: 'hidden', other: 'fill'}" style="background: tomato; width: 50%">...</div>
+	</d-responsive-columns>
+</div>
+<d-responsive-columns breakpoints="{phone: '500px', other: ''}" title="outside"> <!-- outside -->
+<div layout="{phone: '100%', other: '20%'}" style="background: #333; width: 100">
+	<div class="container">
+		<div class="col-md-4"> .col-md-4 </div>
+		<div class="col-md-4"> .col-md-4 </div>
+		<div class="col-md-4"> .col-md-4 </div>
+	</div>
+</div>
+<div layout="{phone: 'hidden', other: 'fill'}" style="background: tomato; width: 50%">...</div>
+</d-responsive-columns>
+
+
+
+{{/content}}
+
+{{#content "foot" mode="prepend"}}
+{{/content}}
+{{/extend}}
