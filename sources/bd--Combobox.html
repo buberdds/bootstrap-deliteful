@@ -1,0 +1,238 @@
+{{#extend "layout"}}
+{{#content "head" mode="append"}}
+<script type="text/javascript">
+	require([
+			"delite/register",
+
+			"deliteful/Combobox",
+			"deliteful/Store",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+{{/content}}
+
+{{#content "body"}}
+<div class="container">
+	<d-store id="myStore1"> 
+	{"label": "Option 1"},
+	{"label": "Option 2"},
+	{"label": "Option 3"},
+	{"label": "Option 4"},
+	{"label": "Option 5"},
+	{"label": "Option 6"},
+	{"label": "Option 7"},
+	{"label": "Option 8"},
+	{"label": "Option 9"},
+	{"label": "Option 10"},
+	{"label": "Option 11"},
+	{"label": "Option 12"},
+	{"label": "Option 13"}
+	</d-store>	
+
+	<d-store id="myStore2"> 
+	{"label": "Option 1"},
+	{"label": "Option 2"},
+	{"label": "Option 3"},
+	{"label": "Option 4"},
+	{"label": "Option 5"},
+	{"label": "Option 6"},
+	{"label": "Option 7"},
+	{"label": "Option 8"},
+	{"label": "Option 9"},
+	{"label": "Option 10"},
+	{"label": "Option 11"},
+	{"label": "Option 12"},
+	{"label": "Option 13"}
+	</d-store>	
+
+	<d-store id="myStore3"> 
+	{"label": "Option 1"},
+	{"label": "Option 2"},
+	{"label": "Option 3"},
+	{"label": "Option 4"},
+	{"label": "Option 5"},
+	{"label": "Option 6"},
+	{"label": "Option 7"},
+	{"label": "Option 8"},
+	{"label": "Option 9"},
+	{"label": "Option 10"},
+	{"label": "Option 11"},
+	{"label": "Option 12"},
+	{"label": "Option 13"}
+	</d-store>	
+	<h3>Single selection</h3>
+	<div >
+
+		{{#if deliteful}}
+		<d-combobox>
+		<d-list store="myStore2"></d-list>
+		</d-combobox>
+		{{^}}
+		<select class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+		{{/if}}
+	</div>
+
+	<h3>Multiple selection</h3>
+	<div>
+		{{#if deliteful}}
+		<d-combobox selectionMode="multiple">
+		<d-list store="myStore2"></d-list>
+		</d-combobox>
+		{{^}}
+		<select multiple class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+		{{/if}}
+
+	</div>
+
+
+
+
+
+	<h3>Basic forms</h3>
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+		</div>
+		<div class="form-group">
+			<label>
+				{{#if deliteful}}
+				<d-combobox>
+				<d-list store="myStore2"></d-list>
+				</d-combobox>
+				{{^}}
+				<select class="form-control">
+					<option value="Option 1"> Option 1 </option>
+					<option value="Option 2"> Option 2 </option>
+					<option value="Option 3"> Option 3 </option>
+					<option value="Option 4"> Option 4 </option>
+					<option value="Option 5"> Option 5 </option>
+					<option value="Option 6"> Option 6 </option>
+					<option value="Option 7"> Option 7 </option>
+					<option value="Option 8"> Option 8 </option>
+					<option value="Option 9"> Option 9 </option>
+				</select>
+				{{/if}}
+			</label>
+		</div>
+
+
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+	<h3>Inline forms</h3>
+	<form class="form-inline">
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputEmail2">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputPassword2">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+		</div>
+
+
+			<label>
+				{{#if deliteful}}
+				<d-combobox>
+				<d-list store="myStore2"></d-list>
+				</d-combobox>
+				{{^}}
+				<select  class="form-control">
+					<option value="Option 1"> Option 1 </option>
+					<option value="Option 2"> Option 2 </option>
+					<option value="Option 3"> Option 3 </option>
+					<option value="Option 4"> Option 4 </option>
+					<option value="Option 5"> Option 5 </option>
+					<option value="Option 6"> Option 6 </option>
+					<option value="Option 7"> Option 7 </option>
+					<option value="Option 8"> Option 8 </option>
+					<option value="Option 9"> Option 9 </option>
+				</select>
+				{{/if}}
+			</label>
+
+			<button type="submit" class="btn btn-default">Sign in</button>
+	</form>
+	<h3>Validation states</h3> 
+	<!-- try also radio, switches, radiobuttons -->   
+
+	{{#each states}}
+	<div class="has-{{this}}">
+		<label>
+		{{#if ../deliteful}}
+		<d-combobox>
+		<d-list store="myStore2"></d-list>
+		</d-combobox>
+		{{^}}
+		<select class="form-control">
+			<option value="Option 1"> Option 1 </option>
+			<option value="Option 2"> Option 2 </option>
+			<option value="Option 3"> Option 3 </option>
+			<option value="Option 4"> Option 4 </option>
+			<option value="Option 5"> Option 5 </option>
+			<option value="Option 6"> Option 6 </option>
+			<option value="Option 7"> Option 7 </option>
+			<option value="Option 8"> Option 8 </option>
+			<option value="Option 9"> Option 9 </option>
+		</select>
+		{{/if}}
+	</label>
+	</div>
+	{{/each}}
+
+
+	<h3>sizing</h3>
+	{{#each sizes}}
+
+	{{#if ../deliteful}}
+	<d-combobox>
+	<d-list store="myStore2"></d-list>
+	</d-combobox>
+	{{^}}
+	<select class="form-control input-{{this}}">
+		<option value="Option 1"> Option 1 </option>
+		<option value="Option 2"> Option 2 </option>
+		<option value="Option 3"> Option 3 </option>
+		<option value="Option 4"> Option 4 </option>
+		<option value="Option 5"> Option 5 </option>
+		<option value="Option 6"> Option 6 </option>
+		<option value="Option 7"> Option 7 </option>
+		<option value="Option 8"> Option 8 </option>
+		<option value="Option 9"> Option 9 </option>
+	</select>
+	{{/if}}
+
+	{{/each}}
+</div>
+{{/content}}
+
+{{#content "foot" mode="prepend"}}
+{{/content}}
+{{/extend}}
