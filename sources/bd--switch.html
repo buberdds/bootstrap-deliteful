@@ -103,7 +103,11 @@
 		</div>
 		<div class="checkbox">
 			<label>
-				<input type="checkbox"> Remember me
+				{{#if deliteful}}
+				<d-switch></d-switch> Check me out
+				{{^}}
+				<input type="checkbox" id="checkboxSuccess" value="option1"> Check me out
+				{{/if}}
 			</label>
 		</div>
 		<button type="submit" class="btn btn-default">Sign in</button>
