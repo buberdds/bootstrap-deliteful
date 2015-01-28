@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/Select
 ---
 
@@ -41,10 +41,10 @@ require(["delite/register", "deliteful/Store", "deliteful/Select", "requirejs-do
 ```html
 <html>
   <d-store id="myStore">
-    {text: "Option 1", value: "1"},
+    {"text": "Option 1", "value": "1"},
     ...
   </d-store>
-  <d-select selectionMode="multiple" id="select1" store="myStore"></d-select>
+  <d-select selectionMode="multiple" store="myStore"></d-select>
 </html>
 ```
 
@@ -68,7 +68,6 @@ require(["delite/register", "dstore/Memory", "dstore/Trackable",
     store.add({text: "Option 1", value: "1"});
     ...
     select.placeAt(document.body);
-    select.startup();
 });
 ```
 
@@ -91,12 +90,16 @@ Note that `deliteful/Select` only supports for this property the values `single`
 
 ### Attribute Mapping
 
-`deliteful/Select` uses two attributes of data store items: the `text` attribute for
-the label of the option elements, and `value` for their value attribute.
+`deliteful/Select` uses the following attributes of data store items:
+* The `text` attribute for the label of the option elements.
+* The `value` attribute for their value attribute.
+* The `disabled` attribute for the disabled state of the option (an option is enabled
+if the attribute is absent, or its value is falsy, or it is the string "false").
+
 Because the widget inherits from [`delite/StoreMap`](/delite/docs/master/StoreMap.md), 
 the mapping between the attributes of the data store items and the attributes used by 
-`deliteful/Select` can be redefined using the `labelAttr` and `valueAttr` properties,
-or using a `labelFunc` and `valueFunc`. See the 
+`deliteful/Select` can be redefined using the `labelAttr`, `valueAttr`, and `disabledAttr`
+properties, or using `labelFunc`, `valueFunc`, and `disabledFunc` properties. See the 
 [`delite/StoreMap`](/delite/docs/master/StoreMap.md) documentation for more
 information about the available mapping options.
 
@@ -134,12 +137,12 @@ particularly its `<option>` children) is browser-dependent.
 
 ### Accessibility
 
-Keyboard accessibility is supported. All supported desktop browsers provide keyboard accessibility
-for elements using the native 
-[HTML5 select element](http://www.w3.org/TR/html5/forms.html#the-select-element).
+|type|status|comment|
+|----|------|-------|
+|Keyboard|ok|All supported desktop browsers provide keyboard accessibility for the native [HTML5 select element](http://www.w3.org/TR/html5/forms.html#the-select-element).|
+|Visual Formatting|ok|Tested for high constrast and browser zoom (200%), in IE and Firefox.|
+|Screen Reader|ok|Relies on screen reader's ability to work with the native [HTML5 select element](http://www.w3.org/TR/html5/forms.html#the-select-element). Tested on JAWS 15 and iOS 8 VoiceOver. With Chrome 35, it does not announce the selected option (although it correctly announces the option initially selected). No issue with VoiceOver.|
 
-Screen reader accessibility relies on screen reader's ability to work with HTML elements using the 
-native [HTML5 select element](http://www.w3.org/TR/html5/forms.html#the-select-element).
 
 ### Globalization
 

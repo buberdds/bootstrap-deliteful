@@ -1,17 +1,14 @@
 ---
-layout: default
+layout: doc
 title: deliteful/list/PageableList
 ---
 
 # deliteful/list/PageableList
 
-The PageableList widget extends the [deliteful/list/List](./List.md) widget and adds paging capabilities to it.
-
-_Note that this widget is currently not supported on IE9 and IE10._
+The `deliteful/PageableList custom element (`d-pageable-list` custom tag) extends the [deliteful/list/List](./List.md) element 
+and adds paging capabilities to it.
 
 A pageable list does not load and display all its content all at once, but only loads and displays a subset of the content while providing user controls to load and display more data.
-
-Its custom element tag is `d-pageable-list`.
 
 ![Next Page Loader Example](images/PageLoader.png)
 
@@ -53,7 +50,8 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
 ### Programmatic Instantiation
 
 ```js
-require(["dstore/Memory", "delite/list/PageableList", "dojo/domReady!"], function (Memory, PageableList) {
+require(["dstore/Memory", "delite/list/PageableList", "requirejs-domready/domReady!"], 
+  function (Memory, PageableList) {
   // Create a memory store for the list and initialize it
   var dataStore = new Memory({idProperty: "label", data:
     [
@@ -72,7 +70,6 @@ require(["dstore/Memory", "delite/list/PageableList", "dojo/domReady!"], functio
   var list = new PageableList({store: dataStore, righttextAttr: "sales", categoryAttr: "region"});
   list.style.height = "100%";
   list.placeAt(document.body);
-  list.startup();
 });
 ```
 
@@ -107,8 +104,7 @@ Here is an example of setting a pageLength of 100 items:
 			var pageableList = new PageableList();
 			pageableList.pageLength = 100;
 			...
-			this.ownerDocument.body.appendChild(pageableList);
-			pageableList.startup();
+			pageableList.placeAt(document.body);
 		});
 ```
 
@@ -261,6 +257,8 @@ See also [`deliteful/list/List` enterprise use](./List.md#enterprise) for the en
 
 ### Globalization
 
-`deliteful/list/PageableList` provides an internationalizable bundle that contains only one message, with the key `default-load-message`.
-This is the message displayed by page loaders.
- This message supports the keyword `${pageLength}`, that is replaced by the current value of the `pageLength` property of the widget.
+`deliteful/list/PageableList` provides an internationalizable bundle that contains only one message, with the 
+key `default-load-message`. This is the message displayed by page loaders.
+This message supports the keyword `${pageLength}`, that is replaced by the current value of the `pageLength` property 
+of the widget.
+

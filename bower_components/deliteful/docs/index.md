@@ -1,5 +1,5 @@
 ---
-layout: doc
+layout: docMain
 ---
 
 ## Introduction
@@ -42,3 +42,8 @@ layout: doc
 ## Non Visual Custom Elements
 
 * [Store](Store.md)
+
+## Other Modules
+
+* [features](features.md)
+* [channelBreakpoints](channelBreakpoints.md)

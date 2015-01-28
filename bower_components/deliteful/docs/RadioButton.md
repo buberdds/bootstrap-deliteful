@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/RadioButton
 ---
 
@@ -55,13 +55,10 @@ allowfullscreen="allowfullscreen" frameborder="0">
 
      var sw = new RadioButton({checked:true, name: "category", value: "SUV"});
      sw.placeAt(document.body);
-     sw.startup();
      sw = new RadioButton({name: "category", value: "Sport"});
      sw.placeAt(document.body);
-     sw.startup();
      sw = new RadioButton({name: "category", value: "Executive"});
      sw.placeAt(document.body);
-     sw.startup();
 });
 ```
 

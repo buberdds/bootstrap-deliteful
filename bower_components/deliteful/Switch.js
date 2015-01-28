@@ -1,14 +1,14 @@
 /** @module deliteful/Switch */
 define([
 	"requirejs-dplugins/has",
-	"dojo/dom-class",
+	"requirejs-dplugins/jquery!attributes/classes",
 	"dpointer/events",
 	"delite/register",
 	"deliteful/Checkbox",
 	"delite/handlebars!./Switch/Switch.html",
 	"requirejs-dplugins/has!bidi?./Switch/bidi/Switch",
 	"delite/theme!./Switch/themes/{{theme}}/Switch.css"
-], function (has, domClass, pointer, register, Checkbox, template, BidiSwitch) {
+], function (has, $, pointer, register, Checkbox, template, BidiSwitch) {
 
 	/**
 	 * A form-aware switch widget that represents a toggle switch with a sliding knob.
@@ -58,18 +58,20 @@ define([
 		},
 
 		_pointerDownHandler: function (e) {
-			this._startX = this._curX = e.clientX;
-			pointer.setPointerCapture(this._knobGlassNode, e.pointerId);
-			if (!this._pHandlers) {
-				this._pHandlers = [
-					{e: "pointermove", l: this._pointerMoveHandler.bind(this)},
-					{e: "pointerup", l: this._pointerUpHandler.bind(this)},
-					{e: "lostpointercapture", l: this._lostPointerCaptureHandler.bind(this)}
-				];
+			if (!this.disabled) {
+				this._startX = this._curX = e.clientX;
+				pointer.setPointerCapture(this._knobGlassNode, e.pointerId);
+				if (!this._pHandlers) {
+					this._pHandlers = [
+						{e: "pointermove", l: this._pointerMoveHandler.bind(this)},
+						{e: "pointerup", l: this._pointerUpHandler.bind(this)},
+						{e: "lostpointercapture", l: this._lostPointerCaptureHandler.bind(this)}
+					];
+				}
+				this._pHandlers.forEach(function (h) { this._knobGlassNode.addEventListener(h.e, h.l); }.bind(this));
+				e.preventDefault();
+				e.stopPropagation();
 			}
-			this._pHandlers.forEach(function (h) { this._knobGlassNode.addEventListener(h.e, h.l); }.bind(this));
-			e.preventDefault();
-			e.stopPropagation();
 		},
 
 		_pointerMoveHandler: function (e) {
@@ -78,13 +80,14 @@ define([
 				w = parseInt(cs.width, 10);
 			if (!this._drag && Math.abs(e.clientX - this._startX) > 4) {
 				this._drag = true;
-				domClass.remove(this._innerNode, "-d-switch-transition");
-				domClass.remove(this._pushNode, "-d-switch-transition");
-				domClass.remove(this._innerWrapperNode, "-d-switch-transition");
+				$(this._innerNode).removeClass("-d-switch-transition");
+				$(this._pushNode).removeClass("-d-switch-transition");
+				$(this._innerWrapperNode).removeClass("-d-switch-transition");
 			}
 			this._curX = e.clientX;
 			if (this._drag) {
-				// knobWidth and switchWidth are sometimes wrong if computed in attachedCallback on Chrome so do it here
+				// knobWidth and switchWidth are sometimes wrong if computed in 
+				// attachedCallback on Chrome so do it here
 				this._knobWidth = parseInt(window.getComputedStyle(this._knobNode).width, 10);
 				this._switchWidth = parseInt(window.getComputedStyle(this).width, 10);
 				var nw = this.isLeftToRight() ? w + dx : w - dx,
@@ -119,9 +122,9 @@ define([
 			this._drag = false;
 			this._pushNode.style.width = "";
 			this._innerNode.style.transform = "none";
-			domClass.add(this._innerNode, "-d-switch-transition");
-			domClass.add(this._pushNode, "-d-switch-transition");
-			domClass.add(this._innerWrapperNode, "-d-switch-transition");
+			$(this._innerNode).addClass("-d-switch-transition");
+			$(this._pushNode).addClass("-d-switch-transition");
+			$(this._innerWrapperNode).addClass("-d-switch-transition");
 		},
 
 		_cleanHandlers: function () {

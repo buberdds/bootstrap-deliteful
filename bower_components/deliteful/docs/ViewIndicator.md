@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/ViewIndicator
 ---
 
@@ -11,6 +11,10 @@ children of the ViewStack. The dot representing the visible child is white while
 
 ![ViewIndicator Transitions](images/ViewIndicator.png)
 
+<iframe width="100%" height="300" allowfullscreen="allowfullscreen" frameborder="0" 
+src="http://jsfiddle.net/ibmjs/kd1qj9bw/embedded/result,html,css,js">
+<a href="http://jsfiddle.net/ibmjs/kd1qj9bw/">checkout the sample on JSFiddle</a></iframe>
+
 ##### Table of Contents
 [Element Instantiation](#instantiation)  
 [Element Configuration](#configuration)  
@@ -21,7 +25,7 @@ children of the ViewStack. The dot representing the visible child is white while
 <a name="instantiation"></a>
 ## Element Instantiation
 
-When creating a ViewIndicator, you must specify which ViewStack it is associated with using the `viewstack` property.
+When creating a ViewIndicator, you must specify which ViewStack it is associated with using the `viewStack` property.
 
 See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how instantiation lifecycle is working.
 
@@ -59,10 +63,8 @@ function (SwapView, ViewIndicator) {
   sv.addChild(child2);
   sv.addChild(child3);
   sv.placeAt(document.body);
-  sv.startup();
-  var vi = new ViewIndicator({viewstack: sv, style: "width:100%"});
+  var vi = new ViewIndicator({viewStack: sv, style: "width:100%"});
   vi.placeAt(document.body);
-  vi.startup();
 });
 ```
 
@@ -71,7 +73,7 @@ function (SwapView, ViewIndicator) {
 
 ### Properties
 
-The `viewstack` property must be set to a `deliteful/ViewStack` or `deliteful/SwapView` id or instance.
+The `viewStack` property must be set to a `deliteful/ViewStack` or `deliteful/SwapView` id or instance.
 The ViewIndicator will track visibility changes of the children of the specified ViewStack and update
 its display
 accordingly.

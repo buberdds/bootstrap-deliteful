@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/LinearLayout
 ---
 
@@ -53,7 +53,6 @@ require(["deliteful/LinearLayout", "requirejs-domready/domReady!"], function (Li
   layout.addChild(centerChild);
   layout.addChild(rightChild);
   layout.placeAt(document.body);
-  layout.startup();
 });
 ```
 

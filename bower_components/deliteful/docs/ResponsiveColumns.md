@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/ResponsiveColumns
 ---
 
@@ -11,14 +11,18 @@ The following example defines two screen classes: "phone" and "other" with a bre
 <d-responsive-columns breakpoints="{phone: '500px', other: ''}">
     <div layout="{phone: '100%', other: '20%'}">...</div>
     <div layout="{phone: 'hidden', other: 'fill'}">...</div>
-</d-view-stack>
+</d-responsive-columns>
 ```
 When the screen width changes (browser window resize or actual device orientation change) and if a new screen class is applied by the container, a "change" event is emitted with 2 specific properties: `screenClass` (the new screen class) and `mediaQueryList` (the MediaQueryList instance at the origin of the change).
 
+<iframe width="100%" height="300" allowfullscreen="allowfullscreen" frameborder="0" 
+src="http://jsfiddle.net/ibmjs/t3tbt7qt/embedded/result,html,css,js">
+<a href="http://jsfiddle.net/ibmjs/t3tbt7qt/">checkout the sample on JSFiddle</a></iframe>
+
 ##### Table of Contents
-[Element Instantiation](#instantiation)
-[Element Configuration](#configuration)
-[Events](#events)
+[Element Instantiation](#instantiation)  
+[Element Configuration](#configuration)  
+[Events](#events)  
 [Element Styling](#styling)  
 [Enterprise Use](#enterprise)  
 
@@ -42,7 +46,7 @@ require(["delite/register", "deliteful/ResponsiveColumns", "requirejs-domready/d
 	<d-responsive-columns breakpoints="{phone: '500px', other: ''}">
 		<div layout="{phone: '100%', other: '20%'}">...</div>
 		<div layout="{phone: 'hidden', other: 'fill'}">...</div>
-	</d-view-stack>
+	</d-responsive-columns>
 </html>
 ```
 
@@ -54,7 +58,6 @@ require([
 	"requirejs-domready/domReady!"
 ], function(ResponsiveColumns){
 	rc = new ResponsiveColumns();
-	window.document.body.appendChild(rc, 1);
 	rc.breakpoints = "{'small': '500px', 'medium': '900px', 'large': ''}";
 	var child = document.createElement("div");
 	child.setAttribute("layout", "{'small': '100%', 'medium': '200px', 'large': '10%'}");
@@ -68,7 +71,7 @@ require([
 	child.innerHTML = "Child 3";
 	child.setAttribute("layout", "{'small': 'hidden', 'medium': 'hidden', 'large': '60%'}");
 	rc.addChild(child);
-	rc.startup();
+	rc.placeAt(document.body);
 });
 ```
 
@@ -94,7 +97,12 @@ Each child must have a `layout` property that defines values for "small", "mediu
 </d-responsive-columns>
 ```
 
-Both `breakpoints` and `layout` properties are string parsed internally by the standard `JSON.parse()`. To facilitate writing markup you can use single quotes when defining these properties, single quotes will be replaced by double quotes before interpreted by `JSON.parse`.
+Both `breakpoints` and `layout` properties are strings parsed internally by the standard `JSON.parse()`. To facilitate writing markup you can use single quotes when defining these properties, single quotes will be replaced by double quotes before interpreted by `JSON.parse`.
+
+Note that the widget computes the default value of its `breakpoints` property using the 
+values of the breakpoins provided by the `deliteful/channelBreakpoints` module. 
+See the [`deliteful/channelBreakpoints`](./channelBreakpoints.md) documentation
+for information about how to statically customize these default breakpoint values.
 
 <a name="events"></a>
 ## Events

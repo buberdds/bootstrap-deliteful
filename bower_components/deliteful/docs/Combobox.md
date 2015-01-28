@@ -1,22 +1,19 @@
 ---
-layout: default
+layout: doc
 title: deliteful/Combobox
 ---
 
 # deliteful/Combobox
 
 `deliteful/Combobox` is a form-aware and store-aware widget leveraging the 
-[`deliteful/list/List`](/deliteful/docs/master/list/List.md) widget for
+[`deliteful/list/List`](./list/List.md) widget for
 displaying the list of options. 
 
-Characteristics:
-* It allows to benefit from the customization mechanism of the list item rendering.
+Main features:
+* Allows to benefit from the customization mechanism of the list item rendering.
 * Provides single and multiple selection modes.
 * Provides optional interactive filtering of list of options (single selection mode only). 
-* The rendering of the popup is multi-channel responsive: by default, the popup is displayed
-on desktop below/above the main element, while on mobile it is displayed in a centered
-overlay.
-
+* Multichannel rendering.
 
 *Example of deliteful/Combobox (single choice mode, on desktop browser):*
 
@@ -85,7 +82,6 @@ require(["delite/register", "dstore/Memory", "dstore/Trackable",
     // Create the Combobox
     var Combobox = new Combobox({list: list, selectionMode: "multiple"});
     Combobox.placeAt(document.body);
-    Combobox.startup();
 });
 ```
 
@@ -107,11 +103,15 @@ Note that the `list` property is set by default to a newly created instance of
 <a name="using"></a>
 ## Using Combobox
 
-### Selection Mode
+### Selection
 
 The widget provides two selection modes through the `selectionMode` property: 
 "single" (only one option can be selected at a time) and "multiple" (one or more
 options can be selected).
+
+Options can be selected programmatically using the `selectedItem` property (or, for multiple
+selection mode, `selectedItems`) inherited from [`delite/Selection`](/delite/docs/master/Selection.md).
+
 
 ### Auto Filtering
 
@@ -142,16 +142,33 @@ The method can be overridden for implementing other filtering strategies.
 
 The customization of the mapping of data store item attributes into render item attributes
 can be done on the List instance using the mapping API of 
-[`deliteful/list/List`](/deliteful/docs/master/list/List.md) inherited from its superclass
+[`deliteful/list/List`](./list/List.md), as supported by its superclass
 `delite/StoreMap`.
 
 See the [`delite/StoreMap`](/delite/docs/master/StoreMap.md) documentation for
-more information about the available mapping options.
+more information about the available mapping options, and the section
+[`Store capabilities`](./list/List.md#store) of List's documentation.
+
+### Multichannel rendering
+
+The widget provides multichannel rendering: the popup is displayed on
+large screens (desktop-like) below/above the main element, while on small and medium
+screens (phone-like and tablet-like), to optimize the usage of the available space,
+the popup is displayed in a centered overlay (an instance of `deliteful/Combobox/ComboPopup` 
+is used in this case).
+
+The channel is controlled by the value of the `has()` channel flags set by
+`deliteful/features` using CSS media queries depending on the screen size.
+See the [`deliteful/features`](./features.md) documentation
+for information about how to configure the channel. Also, see the 
+[`deliteful/channelBreakpoints`](./channelBreakpoints.md) documentation for information
+about how to customize the values of the screen size breakpoints used by the media queries.
 
 ### Value and form support
 
 The widget supports the following form-related properties: `value`, `name`, `disabled`
-and `alt`, inherited from [`delite/FormWidget`](/delite/docs/master/FormWidget.md).
+and `alt`, inherited from [`delite/FormWidget`](/delite/docs/master/FormWidget.md), and
+`readOnly` inherited from [`delite/FormValueWidget`](/delite/docs/master/FormValueWidget.md).
 When used in an HTML form, the submitted value is the one stored in the `value` 
 property of the widget.
 By default, the `label` field of the List's render items is used as value of the option.
@@ -173,7 +190,6 @@ set for `value` on the `List` instance, for example:
     // Create the Combobox
     var combobox = new Combobox({list: list, ...});
     combobox.placeAt(document.body);
-    combobox.startup();
 ```
 
 or in markup:
@@ -213,10 +229,11 @@ The following table lists the CSS classes that can be used to style the Combobox
 
 |Class name/selector|Applies to|
 |----------|----------|
-|d-combobox|Combobox widget node.
-|d-combobox-input|The inner native `<input>` node on desktop.
-|d-combobox-popup-input|The inner native `input` node inside the centered popup displayed on mobile.
+|d-combobox|Combobox widget root node.
+|d-combobox-input|The native `<input>` nodes used by the Combobox widget.
 |d-combobox-list|The List widget displayed inside the popup.
+|d-combo-ok-button|The OK button used in some cases inside the popup.
+|d-combo-cancel-button|The Cancel button used in some cases inside the popup.
 
 
 <a name="enterprise"></a>

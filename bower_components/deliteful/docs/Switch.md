@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/Switch
 ---
 
@@ -47,10 +47,9 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
 
      var sw = new Switch({checked:true});
      sw.placeAt(document.body);
-     sw.startup();
+
      sw = new Switch({checkedLabel: "ON", uncheckedLabel: "OFF", name: "bluetooth"});
      sw.placeAt(document.body);
-     sw.startup();
 });
 ```
 
@@ -130,7 +129,7 @@ The widget `deliteful/Switch` emits a `change` event when its checked state is c
 ### Accessibility
 |type|status|comment|
 |----|------|-------|
-|Keyboard|N/A|No user interaction|
+|Keyboard|yes| Value is toggled when the space bar is pressed.|
 |Visual Formatting|ok|Support high contrast on Firefox and Internet Explorer desktop browsers.|
 |Screen Reader|yes|Supports ARIA role checkbox. Tested with JAWS and VoiceOver|
 

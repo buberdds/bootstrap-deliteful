@@ -30,9 +30,9 @@
 
 define([
 	"./has",
-	"./jquery!deferred",
+	"./Promise!",
 	"module"
-], function (has, $, module) {
+], function (has, Promise, module) {
 	"use strict";
 
 	has.add("event-link-onload-api", function (global) {
@@ -49,30 +49,29 @@ define([
 	 * @private
 	 */
 	var listenOnLoad = function (link) {
-		var def = new $.Deferred(),
-			loadHandler = has("event-link-onload-api") ?
-				function () {
-					// We're using "readystatechange" because IE happily support both
-					link.onreadystatechange = link.onload = function () {
-						if (!link.readyState || link.readyState === "complete") {
-							link.onreadystatechange = link.onload = null;
-							def.resolve();
-						}
-					};
-				} :
-				function () {
+		return new Promise(function (resolve) {
+			if (has("event-link-onload-api")) {
+				// We're using "readystatechange" because IE happily support both
+				link.onreadystatechange = link.onload = function () {
+					if (!link.readyState || link.readyState === "complete") {
+						link.onreadystatechange = link.onload = null;
+						resolve();
+					}
+				};
+			} else {
+				var poll = function () {
 					// watches a stylesheet for loading signs.
 					var sheet = link.sheet || link.styleSheet,
 						styleSheets = document.styleSheets;
 					if (sheet && Array.prototype.lastIndexOf.call(styleSheets, sheet) !== -1) {
-						def.resolve();
+						resolve();
 					} else {
-						setTimeout(loadHandler, 25);
+						setTimeout(poll, 25);
 					}
 				};
-
-		loadHandler();
-		return def.promise();
+				poll();
+			}
+		});
 	};
 
 	var loadCss = {
@@ -204,19 +203,21 @@ define([
 					});
 
 				if (CleanCSS) {
-					var result = "";
+					var layer = "";
 					loadList.forEach(function (src) {
-						result += new CleanCSS({
+						var result = new CleanCSS({
 							relativeTo: "./",
 							target: dest
 						}).minify("@import url(" + src + ");");
+						// Support clean-css version 2.x and 3.x
+						layer += result.styles || result;
 					});
 
-					writePluginFiles(dest, result);
+					writePluginFiles(dest, layer);
 					return true;
 				} else {
-					console.log(">> Node module clean-css not found. Skipping CSS inlining. If you want CSS inlining" +
-						" run 'npm install clean-css' in your console.");
+					console.log(">> WARNING: Node module clean-css not found. Skipping CSS inlining. If you" +
+						" want CSS inlining run 'npm install clean-css' in your console.");
 					loadList.forEach(function (src) {
 						writePluginFiles(src, fs.readFileSync(src));
 					});

@@ -1,8 +1,10 @@
 /** @module deliteful/SwapView */
 define([
-	"dcl/dcl", "delite/register", "delite/keys", "dojo/dom-class", "dpointer/events", "./ViewStack",
+	"dcl/dcl", "delite/register", "delite/keys",
+	"requirejs-dplugins/jquery!attributes/classes",
+	"dpointer/events", "./ViewStack",
 	"delite/theme!./SwapView/themes/{{theme}}/SwapView.css"
-], function (dcl, register, keys, domClass, dpointer, ViewStack) {
+], function (dcl, register, keys, $, dpointer, ViewStack) {
 	/**
 	 * SwapView container widget. Extends ViewStack to let the user swap the visible child using a swipe gesture.
 	 * You can also use the Page Up / Down keyboard keys to go to the next/previous child.
@@ -18,7 +20,8 @@ define([
 	 */
 	return register("d-swap-view", [HTMLElement, ViewStack], /** @lends module:deliteful/SwapView# */{
 		/**
-		 * The name of the CSS class of this widget.
+		 * The name of the CSS class of this widget. Note that this element also use the d-view-stack class to
+		 * leverage `deliteful/ViewStack` styles.
 		 * @member {string}
 		 * @default "d-swap-view"
 		 */
@@ -52,10 +55,12 @@ define([
 			}
 		},
 
-		postRender: function () {
+		preRender: function () {
 			// we want to inherit from ViewStack's CSS (including transitions).
-			domClass.add(this, "d-view-stack");
+			$(this).addClass("d-view-stack");
+		},
 
+		postRender: function () {
 			this.on("pointerdown", this._pointerDownHandler.bind(this));
 			this.on("pointermove", this._pointerMoveHandler.bind(this));
 			this.on("pointerup", this._pointerUpHandler.bind(this));
@@ -96,7 +101,7 @@ define([
 
 						this._drag.reverse = dx > 0;
 
-						domClass.add(this, "-d-swap-view-drag");
+						$(this).addClass("-d-swap-view-drag");
 
 						childIn.style.visibility = "visible";
 						childIn.style.display = "";
@@ -191,7 +196,7 @@ define([
 		 */
 		_endTransition: function () {
 			if (this._drag) {
-				domClass.remove(this, "-d-swap-view-drag");
+				$(this).removeClass("-d-swap-view-drag");
 
 				if (this._drag.slideBack) {
 					// Hide the "in" view if the wap was cancelled (slide back).

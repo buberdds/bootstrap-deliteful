@@ -33,23 +33,23 @@
  *
  * @module delite/handlebars
  */
-define(["./Template", "require"], function (Template, require) {
+define(["./Template", "require", "requirejs-dplugins/Promise!"], function (Template, require, Promise) {
 
 	// Text plugin to load the templates and do the build.
 	var textPlugin = "requirejs-text/text";
 
 	/**
 	 * Given a string like "hello {{foo}} world", generate JS code to output that string,
-	 * ex: "hello" + this.foo + "world", and also get list of properties that we need to watch for changes.
+	 * ex: "hello" + this.foo + "world"
 	 * @param {string} text
 	 * @param {boolean} convertUndefinedToBlank - Useful so that class="foo {{item.bar}}" will convert to class="foo"
 	 * rather than class="foo undefined", but for something like aria-valuenow="{{value}}", when value is undefined
 	 * we need to leave it that way, to trigger removal of that attribute completely instead of setting
 	 * aria-valuenow="".
-	 * @returns {Object} Object like {expr: "'hello' + this.foo + 'world'", dependsOn: ["foo"]}
+	 * @returns {string} like "'hello' + this.foo + 'world'"
 	 */
 	function toJs(text, convertUndefinedToBlank) {
-		var inVar, parts = [], wp = {};
+		var inVar, parts = [];
 
 		(text || "").split(/({{|}})/).forEach(function (str) {
 			if (str === "{{") {
@@ -62,12 +62,8 @@ define(["./Template", "require"], function (Template, require) {
 				if (/this\./.test(prop)) {
 					// JS expression (ex: this.selectionMode === "multiple")
 					parts.push("(" + str + ")");
-					str.match(/this\.(\w+)/g).forEach(function (thisVar) {
-						wp[thisVar.substring(5)] = true;	// "this.foo" --> "foo"
-					});
 				} else {
 					// Property (ex: selectionMode) or path (ex: item.foo)
-					wp[prop.replace(/[^\w].*/, "")] = true; // If nested prop (item.foo), watch top level prop (item).
 					parts.push(convertUndefinedToBlank ? "(this." + prop + "== null ? '' : this." + prop + ")" :
 						"this." + prop);
 				}
@@ -78,10 +74,7 @@ define(["./Template", "require"], function (Template, require) {
 			}
 		});
 
-		return {
-			expr: parts.join(" + "),
-			dependsOn: Object.keys(wp)
-		};
+		return parts.join(" + ");
 	}
 
 	var handlebars = /** @lends module:delite/handlebars */ {
@@ -95,7 +88,7 @@ define(["./Template", "require"], function (Template, require) {
 		 */
 		parse: function (templateNode, xmlns) {
 			/* jshint maxcomplexity:13 */
-			// Get tag name, reversing the tag renaming done in parse()
+			// Get tag name, reversing the tag renaming done in toDom()
 			var tag = templateNode.hasAttribute("is") ? templateNode.getAttribute("is") :
 					templateNode.tagName.replace(/^template-/i, "").toLowerCase(),
 				elem = Template.getElement(tag);
@@ -132,10 +125,7 @@ define(["./Template", "require"], function (Template, require) {
 									// conversion code needed on iOS for autocorrect property
 									value = value === "on" ? "true" : "false";
 								}
-								attributes[item.name] = {
-									expr: value,
-									dependsOn: []
-								};
+								attributes[item.name] = value;
 							} else {
 								attributes[item.name] = toJs(item.value, item.name === "class");
 							}
@@ -218,7 +208,7 @@ define(["./Template", "require"], function (Template, require) {
 			// closing </template-input> tag.
 			templateText = templateText.replace(
 				/* jshint maxlen:200 */
-				/<template-(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)([^>]*)\/?>/g,
+				/<template-(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)([^>]*?)\/?>/g,
 				"<template-$1$2></template-$1>");
 
 			// Create DOM tree from template.
@@ -264,6 +254,29 @@ define(["./Template", "require"], function (Template, require) {
 		},
 
 		/**
+		 * Similar to compile() but before compile then template, loads the modules specified in the
+		 * template via the `requires=...` attribute.
+		 * @param {string} templateText - See module description for details on template format.
+		 * @param {Function} require - AMD's require() method.
+		 * @returns {Promise} Promise for the function that compile() would have returned.
+		 */
+		requireAndCompile: function (templateText, require) {
+			var templateDom = handlebars.toDom(templateText),
+				requires = templateDom.getAttribute("requires") ||
+					templateDom.getAttribute("data-requires") || "";
+			templateDom.removeAttribute("requires");
+			templateDom.removeAttribute("data-requires");
+
+			return new Promise(function (resolve) {
+				require(requires.split(/,\s*/), function () {
+					var tree = handlebars.parse(templateDom);
+					var template = new Template(tree);
+					resolve(template.func);
+				});
+			});
+		},
+
+		/**
 		 * Returns a function to generate the DOM specified by the template.
 		 * Also loads any AMD dependencies specified on the template's root node via the `requires` property.
 		 * This is the function run when you use this module as a plugin.
@@ -276,23 +289,14 @@ define(["./Template", "require"], function (Template, require) {
 		 */
 		load: function (mid, require, onload, loaderConfig) {
 			require([textPlugin + "!" + mid], function (templateText) {
-				// The build only need the call to requirejs-text/text to work.
+				// The build only needs the call to requirejs-text/text to work.
 				if (loaderConfig.isBuild) {
 					onload();
 					return;
 				}
 
-				var templateDom = handlebars.toDom(templateText),
-					requires = templateDom.getAttribute("requires") ||
-						templateDom.getAttribute("data-requires") || "";
-				templateDom.removeAttribute("requires");
-				templateDom.removeAttribute("data-requires");
-				require(requires.split(/,\s*/), function () {
-					var tree = handlebars.parse(templateDom);
-					var template = new Template(tree);
-					onload(template.func);
-				});
-			});
+				this.requireAndCompile(templateText, require).then(onload);
+			}.bind(this));
 		},
 
 		/**

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/ViewStack
 ---
 
@@ -17,6 +17,10 @@ Some of the transition types are described in the following picture:
  4. Fade
 
 ![ViewStack Transitions](images/ViewStack.png)
+
+<iframe width="100%" height="300" allowfullscreen="allowfullscreen" frameborder="0" 
+src="http://jsfiddle.net/ibmjs/4fttnv3t/embedded/result,js,html">
+<a href="http://jsfiddle.net/ibmjs/4fttnv3t/">checkout the sample on JSFiddle</a></iframe>
 
 ##### Table of Contents
 [Element Instantiation](#instantiation)  
@@ -39,7 +43,7 @@ require(["delite/register", "deliteful/ViewStack", "requirejs-domready/domReady!
 
 ```html
 <html>
-  <d-view-stack style="width:100%, height:200px">
+  <d-view-stack style="width:100%; height:200px">
     <div style="background-color: darkblue">Child 1 (Default visible child)</div>
     <div style="background-color: white">Child 2</div>
     <div style="background-color: crimson">Child 3</div>
@@ -59,7 +63,6 @@ require(["deliteful/ViewStack", "requirejs-domready/domReady!"], function (ViewS
   vs.addChild(child2);
   vs.addChild(child3);
   vs.placeAt(document.body);
-  vs.startup();
 });
 ```
 

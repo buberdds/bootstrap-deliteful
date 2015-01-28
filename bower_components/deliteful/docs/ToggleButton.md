@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/ToggleButton
 ---
 
@@ -56,10 +56,9 @@ src="http://jsfiddle.net/ibmjs/at8z7abL/embedded/result,js,html">
          label: "Off"
      });
      tb.placeAt(document.body);
-     tb.startup();
+
      tb = new ToggleButton({checked: true, label: "WiFi"});
      tb.placeAt(document.body);
-     tb.startup();
 });
 ```
 
@@ -115,7 +114,7 @@ The widget `deliteful/ToggleButton` provides a `change` event when its state is 
 ### Accessibility
 |type|status|comment|
 |----|------|-------|
-|Keyboard|N/A|No user interaction|
+|Keyboard|yes|`checked` property is toggled when the space bar or the enter key are pressed.|
 |Visual Formatting|ok|Support high contrast on Firefox and Internet Explorer desktop browsers.|
 |Screen Reader|yes|Tested with JAWS and VoiceOver|
 

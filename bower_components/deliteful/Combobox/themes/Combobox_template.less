@@ -1,18 +1,27 @@
 .d-combobox {
 	display: inline-block;
+	position: relative;
 	vertical-align: middle;
 	margin: 0;
 	padding: 0;
+	/* Setting pointer cursor on root node, input node, and arrow pseudo-element */
+	/* is needed such that the cursor works in all desktop browsers for both */
+	/* the input and the arrow.*/ 
+	cursor: pointer;
 	.d-combobox-styles();
 	
 	&::after {
 		/* dropdown arrow */
 		content: "\25BC";
-		padding:0;
-		position: relative;
-		/* allow clicks to pass through */
-		pointer-events: none;
+		display: inline-block;
+		position: absolute;
+		padding: 0;
+		cursor: pointer;
+		line-height: normal;
 		.d-combobox-arrow-styles();
+	}
+	&::after[disabled] {
+		cursor: auto;
 	}
 	&.d-rtl::after {
 		.d-combobox-arrow-styles-rtl();
@@ -22,25 +31,42 @@
 	}
 }
 
-.d-combobox-input {
-	height: inherit;
-	
-	/* Necessary for Safari on iOS to avoid misplacement of the dropdown arrow */
-	/* due to the presence of the hidden input which stores the submitted value.*/
-	margin: 0;
-	
-	&[disabled],
-	fieldset[disabled] & {
-		opacity: 0.5;
-	}
+.d-combobox[disabled] {
+	cursor: auto;
+	opacity: 0.5;
 }
 
-.d-combobox-input, .d-combobox-popup-input {
+.d-combo-popup {
+	/* Needed for the correct layout of its LinearLayout child */
+	display: block;
+}
+
+/* Applies to both the input inside the root node and the input */
+/* conditionally present inside the popup */
+.d-combobox-input {
 	.d-combobox-input-styles;
 	color: inherit;
 	font-family: inherit;
 	font-size: inherit;
-	line-height: inherit;
+	line-height: normal;
+	
+	&[disabled],
+	fieldset[disabled] & {
+		opacity: 0.5;
+		cursor: auto;
+	}
+}
+
+/* Applies to the input inside the root node but does not apply */
+/* to the input conditionally present inside the popup */
+.d-combobox .d-combobox-input {
+	height: 100%;
+	vertical-align: inherit;
+	cursor: pointer;
+	
+	/* Necessary for Safari on iOS to avoid misplacement of the dropdown arrow */
+	/* due to the presence of the hidden input which stores the submitted value.*/
+	margin: 0;
 }
 
 .d-combobox .d-combobox-list-hidden {

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/StarRating
 ---
 
@@ -38,10 +38,9 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
 ### Programmatic Instantiation
 
 ```js
-require(["deliteful/StarRating", "dojo/domReady!"], function (StarRating) {
+require(["deliteful/StarRating", "requirejs-domready/domReady!"], function (StarRating) {
   var starRating = new StarRating({max: 7, value: 3.5, editHalfValues: true});
   starRating.placeAt(document.body);
-  starRating.startup();
 });
 ```
 

@@ -1,14 +1,14 @@
 /** @module deliteful/ViewStack */
 define(["dcl/dcl",
 	"decor/sniff",
-	"dojo/Deferred",
-	"dojo/dom-class",
+	"requirejs-dplugins/Promise!",
+	"requirejs-dplugins/jquery!attributes/classes",
 	"delite/register",
 	"delite/DisplayContainer",
 	"delite/theme!./ViewStack/themes/{{theme}}/ViewStack.css",
 	"requirejs-dplugins/css!./ViewStack/transitions/slide.css",
 	"requirejs-dplugins/css!./ViewStack/transitions/reveal.css"],
-	function (dcl, has, Deferred, domClass, register, DisplayContainer) {
+	function (dcl, has, Promise, $, register, DisplayContainer) {
 		function setVisibility(node, val) {
 			if (node) {
 				if (val) {
@@ -22,7 +22,7 @@ define(["dcl/dcl",
 		}
 		function setReverse(node) {
 			if (node) {
-				domClass.add(node, "-d-view-stack-reverse");
+				$(node).addClass("-d-view-stack-reverse");
 			}
 		}
 		function cleanCSS(node) {
@@ -153,37 +153,58 @@ define(["dcl/dcl",
 				this._setChildrenVisibility();
 			},
 
-			showNext: function (props) {
+			/**
+			 * Shows the immediately following sibling of the ViewStack visible element.
+			 * The parameter 'params' is optional. If not specified, this.transition, and this.reverse are used.
+			 * @param {Object} [params] - Optional params. A hash like {transition: "reveal", reverse: true}.
+			 * The transition value can be "slide", "overlay", "fade" or "flip". Reverse transition applies to "slide"
+			 * and "reveal". Transition is internally set to "none" if the ViewStack is not visible.
+			 * @returns {Promise} A promise that will be resolved when the display and transition effect will have
+			 * been performed.
+			 */
+			showNext: function (params) {
 				//		Shows the next child in the container.
-				this._showPreviousNext("nextElementSibling", props);
+				return this._showPreviousNext("nextElementSibling", params);
 			},
 
-			showPrevious: function (props) {
+			/**
+			 * Shows the immediately preceding sibling of the ViewStack visible element.
+			 * The parameter 'params' is optional. If not specified, this.transition, and this.reverse are used.
+			 * @param {Object} [params] - Optional params. A hash like {transition: "reveal", reverse: true}.
+			 * The transition value can be "slide", "overlay", "fade" or "flip". Reverse transition applies to "slide"
+			 * and "reveal". Transition is internally set to "none" if the ViewStack is not visible.
+			 * @returns {Promise} A promise that will be resolved when the display and transition effect will have
+			 * been performed.
+			 */
+			showPrevious: function (params) {
 				//		Shows the previous child in the container.
-				this._showPreviousNext("previousElementSibling", props);
+				return this._showPreviousNext("previousElementSibling", params);
 			},
 
 			_showPreviousNext: function (direction, props) {
+				var ret = null;
 				if (!this._visibleChild && this.children.length > 0) {
 					this._visibleChild = this.children[0];
 				}
 				if (this._visibleChild) {
 					var target = this._visibleChild[direction];
 					if (target) {
-						this.show(target, props);
+						ret = this.show(target, props);
 					}
 				}
+				return ret;
 			},
 
-			_doTransition: function (origin, target, event, transition, reverse, deferred) {
+			_doTransition: function (origin, target, event, transition, reverse) {
+				var promise;
 				if (transition !== "none") {
 					if (origin) {
-						this._setAfterTransitionHandlers(origin, event, deferred);
-						domClass.add(origin, transitionClass(transition));
+						promise = this._setAfterTransitionHandlers(origin);
+						$(origin).addClass(transitionClass(transition));
 					}
 					if (target) {
-						this._setAfterTransitionHandlers(target, event, deferred);
-						domClass.add(target, [transitionClass(transition), "-d-view-stack-in"]);
+						promise = this._setAfterTransitionHandlers(target);
+						$(target).addClass(transitionClass(transition) + " -d-view-stack-in");
 					}
 					if (reverse) {
 						setReverse(origin);
@@ -191,34 +212,31 @@ define(["dcl/dcl",
 					}
 					this.defer(function () {
 						if (target) {
-							domClass.add(target, "-d-view-stack-transition");
+							$(target).addClass("-d-view-stack-transition");
 						}
 						if (origin) {
-							domClass.add(origin, ["-d-view-stack-transition", "-d-view-stack-out"]);
+							$(origin).addClass("-d-view-stack-transition -d-view-stack-out");
 						}
 						if (reverse) {
 							setReverse(origin);
 							setReverse(target);
 						}
 						if (target) {
-							domClass.add(target, "-d-view-stack-in");
+							$(target).addClass("-d-view-stack-in");
 						}
 					}, this._timing);
 				} else {
 					if (origin !== target) {
 						setVisibility(origin, false);
 					}
-					deferred.resolve();
 				}
+				return Promise.resolve(promise);
 			},
 
 			changeDisplay: function (widget, event) {
 				// Resolved when display is completed.
-				var deferred = new Deferred();
-
 				if (!widget || widget.parentNode !== this) {
-					deferred.resolve();
-					return deferred.promise;
+					return Promise.resolve();
 				}
 
 				var origin = this._visibleChild;
@@ -233,20 +251,19 @@ define(["dcl/dcl",
 
 				var transition  = (origin === widget) ? "none" : (event.transition || "slide");
 				var reverse = this.isLeftToRight() ? event.reverse : !event.reverse;
-				this._doTransition(origin, widget, event, transition, reverse, deferred);
-
-				return deferred.promise;
+				return this._doTransition(origin, widget, event, transition, reverse);
 			},
 			/**
 			 * Shows a children of the ViewStack. The parameter 'params' is optional. If not specified,
 			 * this.transition, and this.reverse are used.
 			 * This method must be called to display a particular destination child on this container.
-			 * @param {dest} Widget or HTMLElement or id that points to the child this container must display.
-			 * @param {params} Optional params. A hash like {transition: "reveal", reverse: true}. The transition value
+			 * @param {Element|string} dest - Element or Element id that points to the child this container must
+			 * show or hide.
+			 * @param {Object} [params] - A hash like {transition: "reveal", reverse: true}. The transition value
 			 * can be "slide", "overlay", "fade" or "flip". Reverse transition applies to "slide" and
 			 * "reveal". Transition is internally set to "none" if the ViewStack is not visible.
-			 * @returns {module:dojo/promise/Promise} A promise that will be resolved when the display and
-			 * transition effect will have been performed.
+			 * @returns {Promise} A promise that will be resolved when the display and transition effect will have 
+			 * been performed.
 			 */
 			show: dcl.superCall(function (sup) {
 				return function (dest, params) {
@@ -276,26 +293,25 @@ define(["dcl/dcl",
 				};
 			}),
 
-			_setAfterTransitionHandlers: function (node, event, deferred) {
-				var self = this, endProps = {
-					node: node,
-					handle: function () { self._afterTransitionHandle(endProps); },
-					props: event,
-					deferred: deferred
-				};
-
-				domClass.add(this, "-d-view-stack-transition");
-				node.addEventListener("webkitTransitionEnd", endProps.handle);
-				node.addEventListener("transitionend", endProps.handle); // IE10 + FF
+			_setAfterTransitionHandlers: function (node) {
+				var self = this, holder = { node: node};
+				holder.promise = new Promise(function (resolve) {
+					holder.handle =  function () { self._afterTransitionHandle(holder, resolve); };
+				});
+				$(this).addClass("-d-view-stack-transition");
+				node.addEventListener("webkitTransitionEnd", holder.handle);
+				node.addEventListener("transitionend", holder.handle); // IE10 + FF
+				return holder.promise;
 			},
 
-			_afterTransitionHandle: function (item) {
+			_afterTransitionHandle: function (holder, resolve) {
 				// Workaround for FF transitionend randomly dropped.
 				// This method should be called once, when the target view transition is done.
 				// But when 2 transitions (ex: slide) start at the same time, the transitionend event of the
 				// target view can be dropped.
-				if (!item.deferred.isResolved()) {
+				if (!holder.promise.resolved) {
 					// First call
+					holder.promise.resolved = true;
 					var vb;
 					for (var i = 0; i < this.children.length; i++) {
 						vb = this._visibleChild === this.children[i];
@@ -305,17 +321,17 @@ define(["dcl/dcl",
 						}
 					}
 
-					item.node.removeEventListener("webkitTransitionEnd", item.handle);
-					item.node.removeEventListener("transitionend", item.handle);
-					item.deferred.resolve();
+					holder.node.removeEventListener("webkitTransitionEnd", holder.handle);
+					holder.node.removeEventListener("transitionend", holder.handle);
+					resolve();
 				} else {
 					// Second call (occurs randomly on FF). The following code is not critical but try
 					// to keep a clean DOM tree as much as possible.
-					cleanCSS(item.node);
-					if (item.node !== this._visibleChild) {
+					cleanCSS(holder.node);
+					if (holder.node !== this._visibleChild) {
 						cleanCSS(this._visibleChild);
 					}
-					domClass.remove(this, "-d-view-stack-transition");
+					$(this).removeClass("-d-view-stack-transition");
 				}
 			}
 		});

@@ -3,11 +3,11 @@
 This project provides a UI Widget framework working both on desktop and mobile platforms.
 
 One goal of the project is to
-[converge the dijit and dojox/mobile widgets](https://docs.google.com/document/d/1_kgrX25ylxuhtZCRrqAoABMaSdgxjAQgpyd0Ap4xvZU/edit#)
+[converge the dijit and dojox/mobile widgets](https://docs.google.com/document/d/1_kgrX25ylxuhtZCRrqAoABMaSdgxjAQgpyd0Ap4xvZU)
 into a single set of components.
 
-Another is to
-[build on emerging web standards](https://docs.google.com/document/d/1kqe3Oq7W6lg-JY_iqMl5G7SxGTD0uQ6FFIoP4KPAkUw/edit#heading=h.ct7kwnepj0cc).
+Another is to build on emerging web standards, in particular
+[custom elements](http://www.html5rocks.com/en/tutorials/webcomponents/customelements/).
 
 ## Status
 
@@ -30,18 +30,6 @@ This project is distributed by the Dojo Foundation and licensed under the ["New"
 
 All contributions require a [Dojo Foundation CLA](http://dojofoundation.org/about/claForm).
 
-## Dependencies
-
-This project requires the following other projects to run:
- * dojo
- * dcl    (git clone https://github.com/uhop/dcl.git)
- * decor
- * requirejs (git clone https://github.com/jrburke/requirejs.git)
- * dpointer
- * requirejs-domready
- * requirejs-dplugins
- * requirejs-test
-    
 ## Installation
 
 _Bower_ release installation:
@@ -59,4 +47,7 @@ Then install dependencies with bower (or manually from github if you prefer to):
 
 ## Documentation
 
-See the [here](http://ibm-js.github.io/delite/docs/master/index.html).
+See the [introductory blog post](http://ibm-js.github.io/2014/07/18/delite-and-deliteful.html) to get started.
+
+Then see the [delite website](http://ibm-js.github.io/delite/) including the
+[documentation section](http://ibm-js.github.io/delite/docs/master/index.html).

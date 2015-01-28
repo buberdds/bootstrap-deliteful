@@ -2,9 +2,7 @@
 define([
 	"dcl/dcl",
 	"delite/register",
-	"dojo/_base/lang",
-	"dojo/when",
-	"dojo/dom-class",
+	"requirejs-dplugins/jquery!attributes/classes",
 	"delite/keys",
 	"delite/CustomElement",
 	"delite/Selection",
@@ -16,7 +14,7 @@ define([
 	"./_LoadingPanel",
 	"delite/theme!./List/themes/{{theme}}/List.css",
 	"requirejs-dplugins/has!dojo-bidi?delite/theme!./List/themes/{{theme}}/List_rtl.css"
-], function (dcl, register, lang, when, domClass, keys, CustomElement,
+], function (dcl, register, $, keys, CustomElement,
 		Selection, KeyNav, StoreMap, Scrollable, ItemRenderer, CategoryRenderer, LoadingPanel) {
 
 	/**
@@ -134,16 +132,14 @@ define([
 		// the SPACE key to (de)select an item.
 		multiCharSearchDuration: 0,
 
-		/**
-		 * Indicates whether the list has a WAI-ARIA role of `listbox` or its default WAI-ARIA role of `grid`.
-		 * If this indicator is set to `true`:
-		 * * The WAI-ARIA role of the list is set to `listbox`;
-		 * * The `selectionMode` property cannot take the value `none` anymore. Its default value becomes `single`;
-		 * * The `itemRenderer` and `categoryRenderer` widget are not allowed to provide internal navigation.
-		 * @member {boolean}
-		 * @default false
-		 */
-		isAriaListbox: false,
+		setAttribute: dcl.superCall(function (sup) {
+			return function (attr, value) {
+				sup.apply(this, arguments);
+				if (attr === "role") {
+					this._applyRole(value);
+				}
+			};
+		}),
 
 		/**
 		 * Defines the scroll direction: `"vertical"` for a scrollable List, `"none"` for a non scrollable List.
@@ -163,14 +159,14 @@ define([
 		},
 
 		/**
-		 * Defines the selection mode: `"none"` (not allowed if `isAriaListbox` is true), `"radio"`, `"single"`
+		 * Defines the selection mode: `"none"` (not allowed if `role=listbox`), `"radio"`, `"single"`
 		 *  or `"multiple"`.
 		 * @member {string} module:deliteful/list/List#selectionMode
-		 * @default "none", or "single" if isAriaListbox is true.
+		 * @default "none", or "single" if `role=listbox`.
 		 */
 		_setSelectionModeAttr: dcl.superCall(function (sup) {
 			return function (value) {
-				if (this.isAriaListbox && value === "none") {
+				if (this.getAttribute("role") === "listbox" && value === "none") {
 					throw new TypeError("selectionMode 'none' is invalid for an aria listbox, "
 							+ "keeping the previous value of '" + this.selectionMode + "'");
 				} else {
@@ -231,9 +227,18 @@ define([
 
 		render: function () {
 			// Aria attributes
-			this.setAttribute("role", this.isAriaListbox ? "listbox" : "grid");
+			var currentRole = this.getAttribute("role");
+			if (currentRole) {
+				this._applyRole(currentRole);
+			} else {
+				this.setAttribute("role", "grid");
+			}
 			// Might be overriden at the cell (renderer renderNode) level when developing custom renderers
 			this.setAttribute("aria-readonly", "true");
+		},
+
+		postRender: function () {
+			this.notifyCurrentValue("selectionMode");
 		},
 
 		attachedCallback: dcl.superCall(function (sup) {
@@ -252,32 +257,34 @@ define([
 			/*jshint maxcomplexity:11*/
 			if ("selectionMode" in props) {
 				// Update aria attributes
-				domClass.remove(this, this._cssClasses.selectable);
-				domClass.remove(this, this._cssClasses.multiselectable);
+				$(this).removeClass(this._cssClasses.selectable);
+				$(this).removeClass(this._cssClasses.multiselectable);
 				this.removeAttribute("aria-multiselectable");
 				if (this.selectionMode === "none") {
 					// update aria-selected attribute on unselected items
 					for (var i = 0; i < this.children.length; i++) {
 						var child = this.children[i];
-						if (child.renderNode.hasAttribute("aria-selected")) {
+						if (child.renderNode // no renderNode for the loading panel child
+							&& child.renderNode.hasAttribute("aria-selected")) {
 							child.renderNode.removeAttribute("aria-selected");
-							domClass.remove(child, this._cssClasses.selected);
+							$(child).removeClass(this._cssClasses.selected);
 						}
 					}
 				} else {
 					if (this.selectionMode === "single" || this.selectionMode === "radio") {
-						domClass.add(this, this._cssClasses.selectable);
+						$(this).addClass(this._cssClasses.selectable);
 					} else {
-						domClass.add(this, this._cssClasses.multiselectable);
+						$(this).addClass(this._cssClasses.multiselectable);
 						this.setAttribute("aria-multiselectable", "true");
 					}
 					// update aria-selected attribute on unselected items
 					for (i = 0; i < this.children.length; i++) {
 						child = this.children[i];
-						if (domClass.contains(child, this._cssClasses.item)
+						if ($(child).hasClass(this._cssClasses.item)
+								&& child.renderNode // no renderNode for the loading panel child
 								&& !child.renderNode.hasAttribute("aria-selected")) {
 							child.renderNode.setAttribute("aria-selected", "false");
-							domClass.remove(child, this._cssClasses.selected); // TODO: NOT NEEDED ?
+							$(child).removeClass(this._cssClasses.selected); // TODO: NOT NEEDED ?
 						}
 					}
 				}
@@ -288,9 +295,6 @@ define([
 		computeProperties: function (props) {
 			//	List attributes have been updated.
 			/*jshint maxcomplexity:12*/
-			if ("isAriaListbox" in props) {
-				this._refreshAriaListboxProperty();
-			}
 			if ("selectionMode" in props) {
 				if (this.selectionMode === "none") {
 					if (this._selectionClickHandle) {
@@ -299,7 +303,7 @@ define([
 					}
 				} else {
 					if (!this._selectionClickHandle) {
-						this._selectionClickHandle = this.on("click", lang.hitch(this, "handleSelection"));
+						this._selectionClickHandle = this.on("click", this.handleSelection.bind(this));
 					}
 				}
 			}
@@ -436,7 +440,7 @@ define([
 					if (renderer) {
 						var itemSelected = !!this.isSelected(currentItem);
 						renderer.renderNode.setAttribute("aria-selected", itemSelected ? "true" : "false");
-						domClass.toggle(renderer, this._cssClasses.selected, itemSelected);
+						$(renderer).toggleClass(this._cssClasses.selected, itemSelected);
 					}
 				}
 			}
@@ -469,13 +473,10 @@ define([
 		//////////// Private methods ///////////////////////////////////////
 
 		/*jshint maxcomplexity:12*/
-		_refreshAriaListboxProperty: function () {
-			this.setAttribute("role", this.isAriaListbox ? "listbox" : "grid");
-			if (this.isAriaListbox) {
-				if (this.selectionMode === "none") {
-					this.selectionMode = "single";
-				}
-				// TODO: SHOULD WE REMOVE THE FOLLOWING CODE FOR OPTIMIZATION ?
+		_applyRole: function (role) {
+			if (role === "listbox") {
+				// TODO: also this codes work specifically when switching between grid and listbox.
+				//       If we're going to support list, we'll need something a little different
 				var nodes = this.querySelectorAll(".d-list-cell[role='gridcell']");
 				for (var i = 0; i < nodes.length; i++) {
 					nodes[i].setAttribute("role", "option");
@@ -491,7 +492,6 @@ define([
 					}
 				}
 			} else {
-				// TODO: SHOULD WE REMOVE THE FOLLOWING CODE FOR OPTIMIZATION ?
 				nodes = this.querySelectorAll(".d-list-cell[role='option']");
 				for (i = 0; i < nodes.length; i++) {
 					nodes[i].setAttribute("role", "gridcell");
@@ -542,7 +542,7 @@ define([
 				} else {
 					this.appendChild(this._loadingPanel);
 				}
-				this._loadingPanel.startup();
+				this._loadingPanel.attachedCallback();
 			}
 		},
 
@@ -610,9 +610,7 @@ define([
 			}
 			// start renderers
 			this.findCustomElements(this).forEach(function (w) {
-				if (w.startup) {
-					w.startup();
-				}
+				w.attachedCallback();
 			});
 		},
 
@@ -663,7 +661,7 @@ define([
 				if (spec.addCategoryAfter) {
 					var categoryRenderer = this._createCategoryRenderer(spec.nodeRef.item);
 					this.insertBefore(categoryRenderer, spec.nodeRef);
-					categoryRenderer.startup();
+					categoryRenderer.attachedCallback();
 				}
 			} else {
 				this.appendChild(renderer);
@@ -671,9 +669,9 @@ define([
 			if (spec.addCategoryBefore) {
 				categoryRenderer = this._createCategoryRenderer(renderer.item);
 				this.insertBefore(categoryRenderer, renderer);
-				categoryRenderer.startup();
+				categoryRenderer.attachedCallback();
 			}
-			renderer.startup();
+			renderer.attachedCallback();
 		},
 
 		/**
@@ -770,7 +768,7 @@ define([
 			if (this.selectionMode !== "none") {
 				var itemSelected = !!this.isSelected(item);
 				renderer.renderNode.setAttribute("aria-selected", itemSelected ? "true" : "false");
-				domClass.toggle(renderer, this._cssClasses.selected, itemSelected);
+				$(renderer).toggleClass(this._cssClasses.selected, itemSelected);
 			}
 			renderer.deliver();
 			return renderer;
@@ -795,7 +793,7 @@ define([
 		 * @return {boolean}
 		 */
 		isCategoryRenderer: function (/*deliteful/list/Renderer*/renderer) {
-			return domClass.contains(renderer, this._cssClasses.category);
+			return $(renderer).hasClass(this._cssClasses.category);
 		},
 
 		/**
@@ -961,9 +959,9 @@ define([
 		descendantSelector: function (child) {
 			var enclosingRenderer = this.getEnclosingRenderer(child);
 			return !enclosingRenderer ||
-				(this.isAriaListbox && this.isCategoryRenderer(enclosingRenderer)) ?
+				(this.getAttribute("role") === "listbox" && this.isCategoryRenderer(enclosingRenderer)) ?
 				false :
-				domClass.contains(child, this._cssClasses.cell) || child.hasAttribute("navindex");
+				$(child).hasClass(this._cssClasses.cell) || child.hasAttribute("navindex");
 		},
 
 		/**
@@ -976,7 +974,7 @@ define([
 				if ((evt.keyCode === keys.SPACE && !this._searchTimer)) {
 					this._spaceKeydownHandler(evt);
 				} else {
-					if (!this.isAriaListbox) {
+					if (this.getAttribute("role") !== "listbox") {
 						this._gridKeydownHandler(evt);
 					}
 				}
@@ -1022,7 +1020,8 @@ define([
 		 */
 		_getFirst: function () {
 			var first = this.querySelector("." + this._cssClasses.cell);
-			if (first && this.isAriaListbox && this.isCategoryRenderer(this.getEnclosingRenderer(first))) {
+			if (first && this.getAttribute("role") === "listbox"
+					&& this.isCategoryRenderer(this.getEnclosingRenderer(first))) {
 				first = this.getNext(first, 1);
 			}
 			return first;
@@ -1037,43 +1036,52 @@ define([
 			// summary:
 			var cells = this.querySelectorAll("." + this._cssClasses.cell);
 			var last = cells.length ? cells.item(cells.length - 1) : null;
-			if (last && this.isAriaListbox && this.isCategoryRenderer(this.getEnclosingRenderer(last))) {
+			if (last && this.getAttribute("role") === "listbox"
+					&& this.isCategoryRenderer(this.getEnclosingRenderer(last))) {
 				last = this.getNext(last, -1);
 			}
 			return last;
 		},
 
 		// Simple arrow key support.
-		downArrowKeyHandler: function () {
-			if (this.navigatedDescendant.hasAttribute("navindex")) {
+		downArrowKeyHandler: function (evt) {
+			if (this.navigatedDescendant && this.navigatedDescendant.hasAttribute("navindex")) {
 				return;
 			}
-			var next = this._getFocusedRenderer().nextElementSibling;
-			if (next && this.isAriaListbox && this.isCategoryRenderer(next)) {
-				next = next.nextElementSibling;
+			var focusedRenderer = this._getFocusedRenderer();
+			var next = null;
+			if (focusedRenderer) {
+				next = focusedRenderer.nextElementSibling;
+				if (next && this.getAttribute("role") === "listbox" && this.isCategoryRenderer(next)) {
+					next = next.nextElementSibling;
+				}
 			}
-			this.navigateTo(next ? next.renderNode : this._getFirst());
+			this.navigateTo(next ? next.renderNode : this._getFirst(), false, evt);
 		},
 
-		upArrowKeyHandler: function () {
-			if (this.navigatedDescendant.hasAttribute("navindex")) {
+		upArrowKeyHandler: function (evt) {
+			if (this.navigatedDescendant && this.navigatedDescendant.hasAttribute("navindex")) {
 				return;
 			}
-			var next = this._getFocusedRenderer().previousElementSibling;
-			if (next && this.isAriaListbox && this.isCategoryRenderer(next)) {
-				next = next.previousElementSibling;
+			var focusedRenderer = this._getFocusedRenderer();
+			var next = null;
+			if (focusedRenderer) {
+				next = focusedRenderer.previousElementSibling;
+				if (next && this.getAttribute("role") === "listbox" && this.isCategoryRenderer(next)) {
+					next = next.previousElementSibling;
+				}
 			}
-			this.navigateTo(next ? next.renderNode : this._getLast());
+			this.navigateTo(next ? next.renderNode : this._getLast(), false, evt);
 		},
 
 		// Remap Page Up -> Home and Page Down -> End
 
-		pageUpKeyHandler: function () {
-			this.navigateToFirst();
+		pageUpKeyHandler: function (evt) {
+			this.navigateToFirst(evt);
 		},
 
-		pageDownKeyHandler: function () {
-			this.navigateToLast();
+		pageDownKeyHandler: function (evt) {
+			this.navigateToLast(evt);
 		},
 
 		getNext: function (child, dir) {

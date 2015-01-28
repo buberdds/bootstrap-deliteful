@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/SwapView
 ---
 
@@ -42,6 +42,11 @@ require(["delite/register", "deliteful/SwapView", "requirejs-domready/domReady!"
 </html>
 ```
 
+<iframe width="100%" height="300" allowfullscreen="allowfullscreen" frameborder="0" 
+src="http://jsfiddle.net/ibmjs/kd1qj9bw/embedded/result,js,html">
+<a href="http://jsfiddle.net/ibmjs/kd1qj9bw/">checkout the sample on JSFiddle</a></iframe>
+
+
 ### Programmatic Instantiation
 
 ```js
@@ -54,7 +59,6 @@ require(["deliteful/SwapView", "requirejs-domready/domReady!"], function (SwapVi
   sv.addChild(child2);
   sv.addChild(child3);
   sv.placeAt(document.body);
-  sv.startup();
 });
 ```
 

@@ -1,12 +1,14 @@
 {
 	"name": "requirejs-dplugins",
-	"version": "0.4.1",
+	"version": "0.5.0-beta",
 	"description": "AMD plugins for RequireJS",
 	"dependencies": {
-		"jquery": ">=2.1",
+		"lie": ">=2.8",
 		"requirejs": "2.1.x"
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"jquery": ">=2.1"
+	},
 	"keywords": [
 		"requirejs",
 		"amd",

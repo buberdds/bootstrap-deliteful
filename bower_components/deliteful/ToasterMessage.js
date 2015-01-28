@@ -2,11 +2,11 @@
 define(["dcl/dcl",
 	"delite/Widget",
 	"delite/register",
-	"dojo/Deferred",
-	"dojo/dom-class",
+	"requirejs-dplugins/Promise!",
+	"requirejs-dplugins/jquery!attributes/classes",
 	"dpointer/events",
 	"delite/handlebars!./Toaster/ToasterMessage.html"
-], function (dcl, Widget, register, Deferred, domClass, pointer, template) {
+], function (dcl, Widget, register, Promise, $, pointer, template) {
 
 	// TODO: this could be abstracted in a separate class, so that it can be used by other widgets
 	// such as the toggle/switch.
@@ -175,38 +175,50 @@ define(["dcl/dcl",
 
 	// TODO: this could be abstracted in a separate class, so that it can be used by other widgets
 	var Timer = function (duration) {
-		var _timer = null, _remaining = null,
-			_startDate = null, _d = new Deferred();
+		var promise = new Promise(function (resolve, reject) {
+			var timer = null, _startDate = null, _remaining = null,
+			_fulfilled = false;		// NOTE: necessary because _remaining == 0 doesn't 
+									// necessarily mean the timeout callback was fired immediately
 
-		function _start(duration) {
-			_startDate = Date.now();
-			_timer = setTimeout(function () {
-				_d.resolve();
-			}, duration);
-			return _d;
-		}
-
-		this.start = function () {
-			return _start(duration);
-		};
-
-		this.pause = function () {
-			if (_timer !== null) {
-				clearTimeout(_timer);
-				var rt = duration - Date.now() + _startDate;
-				_remaining = rt > 0 ? rt : 0;
-			} else {
-				_remaining = 0;
+			function _start(duration) {
+				_startDate = Date.now();
+				timer = setTimeout(function () {
+					_fulfilled = true;
+					resolve();
+				}, duration);
 			}
-		};
 
-		this.resume = function () {
-			return _start(_remaining);
-		};
+			function computeRemaining() {
+				var rt = duration - Date.now() + _startDate;
+				return rt >= 0 ? rt : 0;
+			}
 
-		this.promise = function () {
-			return _d;
-		};
+			this.start = function () {
+				_start(duration);
+				return promise;
+			};
+
+			this.pause = function () {
+				if (timer !== null) {
+					clearTimeout(timer);
+					timer = null;
+					_remaining = computeRemaining();
+				} else {
+					_remaining = 0;
+				}
+			};
+
+			this.resume = function () {
+				_start(_remaining);
+				return promise;
+			};
+
+			this.destroy = function () {
+				if (! _fulfilled) {
+					reject();
+				}
+			};
+		}.bind(this));
 	};
 
 	var D_INVISIBLE = "d-invisible",
@@ -396,7 +408,7 @@ define(["dcl/dcl",
 			var wrapper = toaster._wrapper;
 			this._isInserted = true;
 			if (animated) {
-				domClass.add(this, toaster.animationInitialClass);
+				$(this).addClass(toaster.animationInitialClass);
 			}
 			if (toaster.invertOrder && wrapper.hasChildNodes()) {
 				// NOTE: invertOrder has an effect only when wrapper has children
@@ -405,12 +417,12 @@ define(["dcl/dcl",
 			} else {
 				wrapper.appendChild(this);
 			}
-			this.startup();
+			this.attachedCallback();
 
 			// starting timer
 			if (this.isExpirable()) {
 				this._timer = new Timer(this.duration);
-				this.own(this._timer.promise()); // NOTE: this cancels the promise in case the widget is destroyed
+				this.own(this._timer);
 				this._timer.start().then(function () {
 					this._hasExpired = true;
 					toaster.notifyCurrentValue("messages");
@@ -418,16 +430,17 @@ define(["dcl/dcl",
 			}
 
 			// toggling dismiss button visibility
-			domClass.toggle(this._dismissButton, D_HIDDEN, !this.isDismissible());
+			$(this._dismissButton).toggleClass(D_HIDDEN, !this.isDismissible());
 		},
 		_showInDom: function (toaster, animated) {
 			if (animated) {
 				this.defer(function () {
 					// NOTE: this timeout is here only to prevent the browser from optimizing
 					// (which makes the animation invisible)
-					domClass.replace(this, toaster.animationEnterClass, toaster.animationInitialClass);
+					$(this).removeClass(toaster.animationInitialClass);
+					$(this).addClass(toaster.animationEnterClass);
 					listenAnimationEvents(this, function (element) {
-						domClass.remove(element, toaster.animationEnterClass);
+						$(element).removeClass(toaster.animationEnterClass);
 
 						// NOTE: the swipe dismissing is made possible only once the entering animation is done
 						// this is done to avoid the CSS of the animation to interfere with the swipe
@@ -453,20 +466,21 @@ define(["dcl/dcl",
 				this.swipeToDismiss.disable();
 
 				if (animated) {
-					domClass.add(this, animation);
+					$(this).addClass(animation);
 					listenAnimationEvents(this, function (element) {
 						element._toBeRemoved = true;
 						toaster.notifyCurrentValue("messages");
 					});
 				} else {
-					domClass.add(this, D_INVISIBLE);
+					$(this).addClass(D_INVISIBLE);
 					this._toBeRemoved = true;
 					toaster.notifyCurrentValue("messages"); // TODO: could be better handled with an event
 				}
 			}
 		},
 		_removeFromDom: function (toaster, animated) {
-			domClass.replace(this, animated ? toaster.animationEndClass : D_HIDDEN, toaster.animationQuitClass);
+			$(this).removeClass(toaster.animationQuitClass);
+			$(this).addClass(animated ? toaster.animationEndClass : D_HIDDEN);
 			toaster._wrapper.removeChild(this);
 			this._isRemoved = true;
 		},

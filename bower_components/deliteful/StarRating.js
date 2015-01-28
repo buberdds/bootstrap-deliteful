@@ -2,8 +2,8 @@
 define([
 	"requirejs-dplugins/has",
 	"dpointer/events",
-	"dojo/keys",
-	"dojo/dom-class",
+	"delite/keys",
+	"requirejs-dplugins/jquery!attributes/classes",
 	"delite/register",
 	"delite/FormValueWidget",
 	"requirejs-dplugins/has!bidi?./StarRating/bidi/StarRating",
@@ -11,16 +11,13 @@ define([
 	"delite/uacss", // to use dedicated CSS styles in IE9
 	"delite/theme!./StarRating/themes/{{theme}}/StarRating.css",
 	"requirejs-dplugins/has!bidi?delite/theme!./StarRating/themes/{{theme}}/StarRating_rtl.css"
-], function (has, pointer, keys, domClass,
+], function (has, pointer, keys, $,
 			register, FormValueWidget, BidiStarRating, messages) {
 
 	/**
 	 * A widget that displays a rating, usually with stars, and that allows setting a different rating value
 	 * by touching the stars.
 	 * Its custom element tag is `d-star-rating`.
-	 * 
-	 * See the {@link https://github.com/ibm-js/deliteful/tree/master/docs/StarRating.md user documentation}
-	 * for more details.
 	 * 
 	 * @class module:deliteful/StarRating
 	 * @augments delite/FormValueWidget
@@ -65,7 +62,6 @@ define([
 		/* internal properties */
 
 		/*=====
-		_enterValue: null,
 		_hoveredValue: null,
 		_startHandles: null,
 		_keyDownHandle: null,
@@ -97,15 +93,13 @@ define([
 				this.valueNode.style.display = "none";
 				this.appendChild(this.valueNode);
 			}
-			["disabled", "max", "value", "name", "readOnly", "allowZero"].forEach(function (prop) {
-				this.notifyCurrentValue(prop);
-			}, this);
+			this.notifyCurrentValue("disabled", "max", "value", "readOnly", "allowZero");
 		}),
 
 		/* jshint maxcomplexity: 13 */
 		refreshRendering: function (props) {
 			if ("disabled" in props) {
-				domClass.toggle(this, this.baseClass + "-disabled", this.disabled);
+				$(this).toggleClass(this.baseClass + "-disabled", this.disabled);
 			}
 			if ("max" in props) {
 				this.focusNode.setAttribute("aria-valuemax", this.max);
@@ -118,9 +112,6 @@ define([
 				this.focusNode.setAttribute("aria-valuetext",
 						messages["aria-valuetext"].replace("${value}", this.value));
 				this.valueNode.value = this.value;
-			}
-			if ("name" in props && this.name) {
-				this.valueNode.name = this.name;
 			}
 			if ("readOnly" in props || "disabled" in props) {
 				this._refreshEditionEventHandlers();
@@ -176,13 +167,13 @@ define([
 			this._wireHandlers();
 			if (!this._hovering && event.pointerType === "mouse") {
 				this._hovering = true;
-				domClass.add(this, this.baseClass + "-hovered");
+				$(this).addClass(this.baseClass + "-hovered");
 			}
 			var newValue = event.target.value;
 			if (newValue !== undefined) {
 				if (this._hovering) {
 					if (newValue !== this._hoveredValue) {
-						domClass.add(this, this.baseClass + "-hovered");
+						$(this).addClass(this.baseClass + "-hovered");
 						this._updateStars(newValue, false);
 						this._hoveredValue = newValue;
 					}
@@ -202,22 +193,21 @@ define([
 			if (!this._hovering) {
 				this._removeEventsHandlers();
 			} else {
-				domClass.remove(this, this.baseClass + "-hovered");
+				$(this).removeClass(this.baseClass + "-hovered");
 			}
 		},
 
-		/*jshint unused:vars */
-		_pointerLeaveHandler: function (/*Event*/ event) {
+		_pointerLeaveHandler: function () {
 			if (this._hovering) {
 				this._hovering = false;
 				this._hoveredValue = null;
-				domClass.remove(this, this.baseClass + "-hovered");
+				$(this).removeClass(this.baseClass + "-hovered");
 				this._updateStars(this.value, false);
 			}
 			this._removeEventsHandlers();
 		},
 
-		_keyDownHandler: function (/*Event*/ event) {
+		_keyDownHandler: function () {
 			if (this._incrementKeyCodes.indexOf(event.keyCode) !== -1) {
 				event.preventDefault();
 				this._incrementValue();
@@ -268,10 +258,10 @@ define([
 
 		_updateZeroArea: function () {
 			if (this.readOnly || !this.allowZero) {
-				domClass.add(this._zeroSettingArea, "d-hidden");
+				$(this._zeroSettingArea).addClass("d-hidden");
 				delete this.focusNode.value;
 			} else {
-				domClass.remove(this._zeroSettingArea, "d-hidden");
+				$(this._zeroSettingArea).removeClass("d-hidden");
 				// _zeroSettingArea might not fill the whole widget height
 				// so pointer events can land in the underlying focus node
 				this.focusNode.value = 0;

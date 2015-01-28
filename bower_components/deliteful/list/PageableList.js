@@ -4,14 +4,14 @@ define([
 	"delite/register",
 	"dojo/string",
 	"dojo/when",
-	"dojo/Deferred",
-	"dojo/dom-class",
-	"dojo/sniff",
+	"requirejs-dplugins/Promise!",
+	"requirejs-dplugins/jquery!attributes/classes",
+	"decor/sniff",
 	"./List",
 	"./Renderer",
 	"delite/handlebars!./List/_PageLoaderRenderer.html",
 	"requirejs-dplugins/i18n!./List/nls/Pageable"
-], function (dcl, register, string, when, Deferred, domClass, has,
+], function (dcl, register, string, when, Promise, $, has,
 		List, Renderer, template, messages) {
 
 	/*
@@ -50,9 +50,9 @@ define([
 				this.beforeLoading();
 			}
 			if (!this._destroyed) {
-				domClass.toggle(this, "d-loading", loading);
+				$(this).toggleClass("d-loading", loading);
 				this._label.innerHTML = loading ? this.item.loadingMessage : this.item.loadMessage;
-				domClass.toggle(this._progressIndicator, "d-hidden");
+				$(this._progressIndicator).toggleClass("d-hidden");
 				this._progressIndicator.active = loading;
 				if (loading) {
 					this._button.setAttribute("aria-disabled", "true");
@@ -132,25 +132,26 @@ define([
 		 * return undefined. In the other case, it starts a loading
 		 * and returns a Promise that resolves when the loading
 		 * has completed.
-		 * @returns {module:dojo/Deffered} or null
+		 * @returns {Promise} or null
 		 * @private
 		 */
 		_load: function () {
 			if (this._list.hasAttribute("aria-busy")) { return; }
-			var def = new Deferred();
 			this.loading = true;
-			// defer execution so that the new style / class is correctly applied on iOS
-			this.defer(function () {
-				this.performLoading().then(function () {
-					this.loading = false;
-					def.resolve();
-				}.bind(this), function (error) {
-					this.loading = false;
-					def.reject(error);
-					this._queryError(error);
-				}.bind(this));
-			}.bind(this));
-			return def;
+			var self = this;
+			return new Promise(function (resolve, reject) {
+				// defer execution so that the new style / class is correctly applied on iOS
+				self.defer(function () {
+					self.performLoading().then(function () {
+						self.loading = false;
+						resolve();
+					}.bind(this), function (error) {
+						self.loading = false;
+						reject(error);
+						self._queryError(error);
+					});
+				});
+			});
 		}
 	});
 
@@ -645,7 +646,6 @@ define([
 			});
 			this._nextPageLoader.deliver();
 			this._nextPageLoader.placeAt(this);
-			this._nextPageLoader.startup();
 		},
 
 		/**
@@ -673,7 +673,6 @@ define([
 			});
 			this._previousPageLoader.deliver();
 			this._previousPageLoader.placeAt(this, "first");
-			this._previousPageLoader.startup();
 		},
 
 		//////////// List methods overriding ///////////////////////////////////////

@@ -1,7 +1,7 @@
 /** @module deliteful/Combobox */
 define([
 	"dcl/dcl",
-	"dojo/dom-class", // TODO: replace (when replacement confirmed)
+	"requirejs-dplugins/jquery!attributes/classes,event",	// addClass(), css(), on(), off()
 	"dstore/Filter",
 	"decor/sniff",
 	"delite/register",
@@ -9,15 +9,14 @@ define([
 	"delite/HasDropDown",
 	"delite/keys",
 	"./list/List",
-	"./LinearLayout",
-	"./Button",
+	"./features!desktop-like-channel?:./Combobox/ComboPopup",
 	"delite/handlebars!./Combobox/Combobox.html",
 	"requirejs-dplugins/i18n!./Combobox/nls/Combobox",
 	"delite/theme!./Combobox/themes/{{theme}}/Combobox.css"
-], function (dcl, domClass, Filter, has, register, FormValueWidget, HasDropDown,
-		keys, List, LinearLayout, Button, template, messages) {
+], function (dcl, $, Filter, has, register, FormValueWidget, HasDropDown,
+		keys, List, ComboPopup, template, messages) {
 	/**
-	 * A form-aware and store-aware widget leveraging the `deliteful/list/List`
+	 * A form-aware and store-aware multichannel widget leveraging the `deliteful/list/List`
 	 * widget for rendering the options.
 	 * 
 	 * The corresponding custom tag is `<d-combobox>`.
@@ -36,6 +35,18 @@ define([
 	 * case-insensitive, and an item is shown if its label contains the entered
 	 * string. The default filtering policy can be customized thanks to the 
 	 * `filterMode` and `ignoreCase` properties.
+	 * 
+	 * The widget provides multichannel rendering. Depending on the required channel, which
+	 * is determined by the value of the channel flags of `deliteful/features`, the
+	 * widget displays the popup containing the options in a different manner:
+	 * * if `has("desktop-like-channel")` is `true`: in a popup below or above the root node.
+	 * * otherwise (that is for `"phone-like-channel"` and `"tablet-like-channel"`): in an
+	 * overlay centered on the screen, filled with an instance of `deliteful/Combobox/ComboPopup`.
+	 * 
+	 * The channel flags are set by `deliteful/features` using CSS media queries depending on
+	 * the screen size. See the `deliteful/features` documentation for information about the
+	 * channel flags and about how to configure them statically and how to customize the values
+	 * of the screen size breakpoints used by the media queries.
 	 * 
 	 * If the widget is used in an HTML form, the submitted value is the one
 	 * of the `value` property. By default, the `label` field of list render items
@@ -198,11 +209,23 @@ define([
 		 */
 		multipleChoiceNoSelectionMsg: messages["multiple-choice-no-selection"],
 		
-		// TODO: worth exposing public properties?
-		// The default label of the OK button
-		_okButtonLabel: messages["ok-button-label"],
-		// The default label of the Cancel button
-		_cancelButtonLabel: messages["cancel-button-label"],
+		/**
+		 * The text displayed in the OK button when the combobox popup contains such a button.
+		 * The default value is provided by the "ok-button-label" key of
+		 * the message bundle.
+		 * @member {string}
+		 * @default "OK"
+		 */
+		okMsg: messages["ok-button-label"],
+		
+		/**
+		 * The text displayed in the Cancel button when the combobox popup contains such a button.
+		 * The default value is provided by the "cancel-button-label" key of
+		 * the message bundle.
+		 * @member {string}
+		 * @default "Cancel"
+		 */
+		cancelMsg: messages["cancel-button-label"],
 		
 		preRender: function () {
 			this.list = new List();
@@ -210,15 +233,65 @@ define([
 		},
 		
 		refreshRendering: function (oldValues) {
+			var updateReadOnly = false;
 			if ("list" in oldValues) {
 				// Programmatic case (List passed as argument of the ctor of Combobox
 				// or set after the initialization phase)
 				this._initList();
-			} else if ("selectionMode" in oldValues) {
+			}
+			if ("selectionMode" in oldValues) {
+				updateReadOnly = true;
 				if (this.list) {
 					this.list.selectionMode = this.selectionMode === "single" ?
 						"radio" : "multiple";
 				}
+			}
+			if ("autoFilter" in oldValues ||
+				"readOnly" in oldValues) {
+				updateReadOnly = true;
+			}
+			if (updateReadOnly) {
+				this._updateInputReadOnly();
+				this._setSelectable(this.inputNode, !this.inputNode.readOnly);
+			}
+		},
+		
+		/**
+		 * Updates the value of the private property on which the Combobox template
+		 * binds the `readonly` attribute of the input element.
+		 * @private 
+		 */
+		_updateInputReadOnly: function () {
+			var oldValue = this._inputReadOnly;
+			this._inputReadOnly = this.readOnly || !this.autoFilter ||
+				this._useCenteredDropDown() || this.selectionMode === "multiple";
+			if (this._inputReadOnly === oldValue) {
+				// FormValueWidget.refreshRendering() mirrors the value of widget.readOnly
+				// to focusNode.readOnly, thus competing with the binding of the readOnly
+				// attribute of the input node (which is also the focusNode attach point)
+				// in the template of Combobox. To ensure the refresh of the binding is done
+				// including when the value of the flag _inputReadOnly doesn't change while
+				// FormValueWidget has reset the attribute to a different value, force
+				// the notification:
+				this.notifyCurrentValue("_inputReadOnly");
+			} // else no need to notify "by hand", rely on automatic notification
+		},
+		
+		/**
+		 * Configures inputNode such that the text is selectable or unselectable.
+		 * @private
+		 */
+		_setSelectable: function (inputNode, selectable) {
+			if (selectable) {
+				inputNode.removeAttribute("unselectable");
+				$(inputNode)
+					.css("user-select", "") // maps to WebkitUserSelect, etc.
+					.off("selectstart", false);
+			} else {
+				inputNode.setAttribute("unselectable", "on");
+				$(inputNode)
+					.css("user-select", "none") // maps to WebkitUserSelect, etc.
+					.on("selectstart", false);
 			}
 		},
 		
@@ -267,7 +340,7 @@ define([
 			// TODO
 			// This is a workaround waiting for a proper mechanism (at the level
 			// of delite/Store - delite/StoreMap) to allow a store-based widget
-			// to delegate the store-related functions to a parent widget.
+			// to delegate the store-related functions to a parent widget (delite#323).
 			if (!this.list.attached) {
 				this.list.attachedCallback();
 			}
@@ -275,14 +348,14 @@ define([
 			// Class added on the list such that Combobox' theme can have a specific
 			// CSS selector for elements inside the List when used as dropdown in
 			// the combo. 
-			domClass.add(this.list, "d-combobox-list");
+			$(this.list).addClass("d-combobox-list");
 			
 			// The drop-down is hidden initially
-			domClass.add(this.list, "d-combobox-list-hidden");
+			$(this.list).addClass("d-combobox-list-hidden");
 			
 			// The role=listbox is required for the list part of a combobox by the
 			// aria spec of role=combobox
-			this.list.isAriaListbox = true;
+			this.list.setAttribute("role", "listbox");
 			
 			// Avoid that List gives focus to list items when navigating, which would
 			// blur the input field used for entering the filtering criteria. 
@@ -291,7 +364,7 @@ define([
 			this.list.selectionMode = this.selectionMode === "single" ?
 				"radio" : "multiple";
 			
-			var dropDown = this._createDropDown(this.list);
+			var dropDown = this._createDropDown();
 			
 			// Since the dropdown is not a child of the Combobox, it will not inherit
 			// its dir attribute. Hence:
@@ -316,61 +389,59 @@ define([
 			
 			this._initValue();
 			
-			var singleSelectionActionHandler = function (event, list) {
-				var renderer = list.getEnclosingRenderer(event.target);
-				if (renderer && !list.isCategoryRenderer(renderer)) {
-					this.inputNode.value = this._getItemRendererLabel(renderer);
-					this.list.selectedItem = renderer.item;
-					this.value = this._getItemRendererValue(renderer);
+			// React to programmatic changes of selected items
+			this.list.observe(function (oldValues) {
+				if (this.selectionMode === "single" && "selectedItem" in oldValues) {
+					var selectedItem = this.list.selectedItem;
+					// selectedItem non-null because List in radio selection mode, but
+					// the List can be empty, so:
+					this.inputNode.value = selectedItem ? this._getItemLabel(selectedItem) : "";
+					this.value = selectedItem ? this._getItemValue(selectedItem) : "";
 					this.handleOnInput(this.value); // emit "input" event
 					this.defer(function () {
 						// deferred such that the user can see the selection feedback
-						// before the dropdown is closed.
+						// before the dropdown closes.
 						this.closeDropDown(true/*refocus*/);
 					}.bind(this), 100); // worth exposing a property for the delay?
-				}
-			}.bind(this);
-			
-			if (this.selectionMode === "single") {
-				this.list.on("click", function (event) {
-					singleSelectionActionHandler(event, this.list);
-				}.bind(this));
-				this.list.on("keydown", function (event) {
-					if (event.keyCode === keys.ENTER) {
-						singleSelectionActionHandler(event, this.list);
-					}
-				}.bind(this));
-			} else { // selectionMode === "multiple"
-				// if useCenteredDropDown is true, let the dropdown's OK/Cancel
-				// buttons do the job
-				if (!this.useCenteredDropDown()) {
-					this.list.on("selection-change", function () {
+				} else if (this.selectionMode === "multiple" && "selectedItems" in oldValues) {
+					// if _useCenteredDropDown() is true, let the dropdown's OK/Cancel
+					// buttons do the job
+					if (!this._useCenteredDropDown()) {
 						this._validateMultiple(this._popupInput || this.inputNode);
-					}.bind(this));
+					}
 				}
-			}
+			}.bind(this));
 			
 			this._prepareInput(this.inputNode);
 		},
 		
 		/**
 		 * Sets the initial value of the widget. If the widget is inside a form,
-		 * also called when reseting the form. 
+		 * also called when reseting the form.
 		 * @private 
 		 */
 		_initValue: function () {
 			if (this.selectionMode === "single") {
-				var initValueSingleMode = function () {
-					this.inputNode.value = this._getItemRendererLabel(firstItemRenderer);
+				var selectedItem = this.list.selectedItem;
+				if (selectedItem) {
+					this.inputNode.value = this._getItemLabel(selectedItem);
 					// Initialize widget's value
-					var value = this._getItemRendererValue(firstItemRenderer);
+					var value = this._getItemValue(selectedItem);
 					this._set("value", value);
 					this.valueNode.value = value;
-					this.list.selectedItem = firstItemRenderer.item;
-				}.bind(this);
-				var firstItemRenderer = this.list.getItemRendererByIndex(0);
-				if (firstItemRenderer) {
-					initValueSingleMode();
+				} else {
+					var initValueSingleMode = function (firstItemRenderer) {
+						this.inputNode.value = this._getItemRendererLabel(firstItemRenderer);
+						// Initialize widget's value
+						var value = this._getItemRendererValue(firstItemRenderer);
+						this._set("value", value);
+						this.valueNode.value = value;
+						this.list.selectedItem = firstItemRenderer.item;
+					}.bind(this);
+					var firstItemRenderer = this.list.getItemRendererByIndex(0);
+					if (firstItemRenderer) {
+						initValueSingleMode(firstItemRenderer);
+					}
 				}
 			} else { // selectionMode === "multiple"
 				// Differently than in single selection mode, do not select the first option,
@@ -420,101 +491,55 @@ define([
 		/**
 		 * Returns `true` if the dropdown should be centered, and returns
 		 * `false` if it should be displayed below/above the widget.
-		 * The default implementation returns `true` when running on
-		 * iOS or Android, and returns `false` otherwise.
-		 * @protected
+		 * Returns `true` when the module `deliteful/Combobox/ComboPopup` has
+		 * been loaded. Note that the module is loaded conditionally, depending
+		 * on the channel has() features set by `deliteful/features`.
+		 * @private
 		 */
-		useCenteredDropDown: function () {
-			// TODO: the decision about the choice criteria may be
-			// revisited (phone vs tablets?).
-			return has("ios") || has("android");
+		_useCenteredDropDown: function () {
+			return !!ComboPopup;
 		},
 		
-		_createDropDown: function (list) {
-			var centeredDropDown = this.useCenteredDropDown();
+		_createDropDown: function () {
+			this._updateInputReadOnly();
 			
-			// The Combobox template binds the readonly attribute of the input
-			// element on this property 
-			this._inputReadOnly = !this.autoFilter || centeredDropDown ||
-				this.selectionMode === "multiple";
-			
+			var centeredDropDown = this._useCenteredDropDown();
 			var dropDown = centeredDropDown ?
-				this._createCenteredDropDown(list) :
-				this._createNormalDropDown(list);
+				this.createCenteredDropDown() :
+				this.createAboveBelowDropDown();
 			
 			this.dropDownPosition = centeredDropDown ?
 				["center"] :
 				["below", "above"]; // this is the default
-			// TODO: since the user can override the protected "useCenteredDropDown()",
-			// we many want to cope with a dynamic change from centered to non-centered
-			// and vice-versa.
 			
 			return dropDown;
 		},
 		
-		_createNormalDropDown: function (list) {
+		/**
+		 * Factory method which creates the widget used inside above/below drop-down.
+		 * The default implementation simply returns `this.list`.
+		 * @protected
+		 */
+		createAboveBelowDropDown: function () {
 			// Use the List itself as content of the popup. Embedding it in a
 			// LinearLayout has seemed useful for solving layout issues on iOS
 			// (deliteful issue #270), but appears to be harmful on IE11 (deliteful
 			// issue #382). Hence the List is not wrapped anymore inside a LinearLayout.
-			return list;
-		},
-		
-		_createCenteredDropDown: function (list) {
-			// TODO: move to separate widget.
-			var topLayout = new LinearLayout();
-
-			if (this.autoFilter && this.selectionMode !== "multiple") {
-				this._popupInput = this._createPopupInput();
-				topLayout.addChild(this._popupInput);
-			}
-			
-			domClass.add(list, "fill");
-			topLayout.addChild(list);
-			
-			// Just as Android for the native select element, only use ok/cancel
-			// buttons in the multichoice case.
-			if (this.selectionMode === "multiple") {
-				var bottomLayout = new LinearLayout({vertical: false, width: "100%"});
-				var cancelButton = new Button({label: this._cancelButtonLabel});
-				var okButton = new Button({label: this._okButtonLabel});
-				okButton.onclick = function () {
-					this._validateMultiple(this.inputNode);
-					this.closeDropDown();
-				}.bind(this);
-				cancelButton.onclick = function () {
-					this.list.selectedItems = this._selectedItems;
-					this.closeDropDown();
-				}.bind(this);
-				domClass.add(cancelButton, "fill");
-				domClass.add(okButton, "fill");
-				bottomLayout.addChild(cancelButton);
-				bottomLayout.addChild(okButton);
-				topLayout.addChild(bottomLayout);
-			}
-			return topLayout;
+			return this.list;
 		},
 		
 		/**
-		 * Creates the input element inside the popup.
-		 * Only used for single-choice mode.
-		 * @private
+		 * Factory method which creates the widget used inside centered drop-down.
+		 * The default implementation returns a new instance of deliteful/Combobox/ComboPopup
+		 * (the present widget is set for its `combobox` property).
+		 * The method can be overridden in order to create a subclass of ComboPopup (for
+		 * specifying a custom template, for instance).
+		 * @protected
 		 */
-		_createPopupInput: function () {
-			// TODO: use deliteful/SearchBox when will be available.
-			var popupInput = document.createElement("input");
-			domClass.add(popupInput, "d-combobox-popup-input");
-			popupInput.setAttribute("role", "combobox");
-			popupInput.setAttribute("autocomplete", "off");
-			popupInput.setAttribute("autocapitalize", "none");
-			popupInput.setAttribute("autocorrect", "off");
-			popupInput.setAttribute("aria-autocomplete", "list");
-			popupInput.setAttribute("type", "search");
-			popupInput.setAttribute("placeholder", this.searchPlaceHolder);
-			this._prepareInput(popupInput);
-			return popupInput;
+		createCenteredDropDown: function () {
+			return new ComboPopup({combobox: this});
 		},
-
+		
 		_prepareInput: function (inputElement) {
 			this.on("input", function (evt) {
 				// Would be nice to also have an "incrementalFilter" boolean property.
@@ -564,6 +589,7 @@ define([
 				inputElement.value = this.multipleChoiceNoSelectionMsg;
 			}
 			this._set("value", value);
+			this.valueNode.value = value;
 			this.handleOnInput(this.value); // emit "input" event
 		},
 		
@@ -607,38 +633,52 @@ define([
 					this.list._hideLoadingPanel();
 				}.bind(this), 300);
 				
-				sup.apply(this, arguments);
+				var promise = sup.apply(this, arguments);
 				
-				var firstSelectedItem = selectedItems && selectedItems.length > 0 ?
-					selectedItems[0] : null;
-				if (firstSelectedItem) {
-					// Make the first selected item (if any) visible.
-					// Must be done after sup.apply, because List.getBottomDistance
-					// relies on dimensions which are not available if the DOM nodes
-					// are not (yet) visible, hence the popup needs to be shown before.
-					var id = this.list.getIdentity(firstSelectedItem);
-					var renderer = this.list.getRendererByItemId(id);
-					this.list.scrollBy({y: this.list.getBottomDistance(renderer)});
-				}
+				return promise.then(function () {
+					var firstSelectedItem = selectedItems && selectedItems.length > 0 ?
+						selectedItems[0] : null;
+					if (firstSelectedItem) {
+						// Make the first selected item (if any) visible.
+						// Must be done after sup.apply, because List.getBottomDistance
+						// relies on dimensions which are not available if the DOM nodes
+						// are not (yet) visible, hence the popup needs to be shown before.
+						var id = this.list.getIdentity(firstSelectedItem);
+						var renderer = this.list.getRendererByItemId(id);
+						if (renderer) {
+							this.list.scrollBy({y: this.list.getBottomDistance(renderer)});
+						} // null if the list is empty because no item matches the auto-filtering
+					}
+				}.bind(this));
 			};
 		}),
 		
 		closeDropDown: dcl.superCall(function (sup) {
 			return function () {
-				// Closing the dropdown represents a commit interaction
-				this.handleOnChange(this.value); // emit "change" event
+				if (this.opened) {
+					// Using the flag `opened` (managed by delite/HasDropDown), avoid
+					// emitting a new change event if closeDropDown is closed more than once
+					// for a closed dropdown.
+					
+					// Closing the dropdown represents a commit interaction
+					this.handleOnChange(this.value); // emit "change" event
 				
-				// Reinit the query. Necessary such that after closing the dropdown
-				// in autoFilter mode with a text in the input field not matching
-				// any item, when the dropdown will be reopen it shows all items
-				// instead of being empty 
-				this.list.query = {};
+					// Reinit the query. Necessary such that after closing the dropdown
+					// in autoFilter mode with a text in the input field not matching
+					// any item, when the dropdown will be reopen it shows all items
+					// instead of being empty 
+					this.list.query = {};
 				
-				if (this.selectionMode === "single" && this.autoFilter) {
-					// In autoFilter mode, reset the content of the inputNode when
-					// closing the dropdown, such that next time the dropdown is opened
-					// it doesn't show the text the user may have entered for filtering
-					this.inputNode.value = this._getItemLabel(this.list.selectedItem);
+					if (this.selectionMode === "single" && this.autoFilter) {
+						// In autoFilter mode, reset the content of the inputNode when
+						// closing the dropdown, such that next time the dropdown is opened
+						// it doesn't show the text the user may have entered for filtering
+						var selItem = this.list.selectedItem;
+						if (selItem) {
+							(this._popupInput || this.inputNode).value =
+								this._getItemLabel(this.list.selectedItem);
+						}
+					}
 				}
 				
 				sup.apply(this, arguments);

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/Checkbox
 ---
 
@@ -59,10 +59,8 @@ src="http://jsfiddle.net/ibmjs/7sxarg93/embedded/result,html,js">
 
      var cb = new Checkbox({checked:true});
      cb.placeAt(document.body);
-     cb.startup();
      cb = new Checkbox({disabled:true, name: "option1"});
      cb.placeAt(document.body);
-     cb.startup();
 });
 ```
 
@@ -119,7 +117,7 @@ The widget `deliteful/Checkbox` provides a `change` event when its state is chan
 ### Accessibility
 |type|status|comment|
 |----|------|-------|
-|Keyboard|N/A|No user interaction|
+|Keyboard|yes|Value is toggled when the space bar is pressed.|
 |Visual Formatting|ok|Support high contrast on Firefox and Internet Explorer desktop browsers.|
 |Screen Reader|yes|Tested with JAWS and VoiceOver|
 

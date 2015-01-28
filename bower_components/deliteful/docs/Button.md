@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: doc
 title: deliteful/Button
 ---
 
@@ -40,7 +40,6 @@ See [`delite/Widget`](/delite/docs/master/Widget.md) for full details on how ins
   ], function (register, button) {
      var b = new Button({label: "I am a Button"});
      b.placeAt(document.body);
-     b.startup();
 });
 ```
 

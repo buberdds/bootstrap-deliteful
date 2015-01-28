@@ -6,6 +6,8 @@ define([
 	"decor/Stateful"
 ], function (dcl, Observable, Destroyable, Stateful) {
 
+	function nop() {}
+
 	/**
 	 * Dispatched after the CustomElement has been attached.
 	 * This is useful to be notified when an HTMLElement has been upgraded to a
@@ -138,6 +140,9 @@ define([
 				bubbles: false,
 				cancelable: false
 			});
+
+			// Prevent against repeated calls
+			this.attachedCallback = nop;
 		}),
 
 		/**
@@ -254,7 +259,7 @@ define([
 				var parsedAttr = this.parseAttribute(name, attr.value);
 				if (parsedAttr) {
 					parsedAttrs.push(parsedAttr);
-					attrsToRemove.push(attr);
+					attrsToRemove.push(attr.name);
 				}
 			}
 

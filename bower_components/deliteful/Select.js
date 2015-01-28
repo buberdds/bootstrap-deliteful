@@ -1,14 +1,14 @@
 /** @module deliteful/Select */
 define([
 	"dcl/dcl",
-	"dojo/dom-class", // TODO: replace (when replacement confirmed)
+	"requirejs-dplugins/jquery!attributes/classes",
 	"delite/register",
 	"delite/FormWidget",
 	"delite/StoreMap",
 	"delite/Selection",
 	"delite/handlebars!./Select/Select.html",
 	"delite/theme!./Select/themes/{{theme}}/Select.css"
-], function (dcl, domClass, register,
+], function (dcl, $, register,
 	FormWidget, StoreMap, Selection, template) {
 
 	/**
@@ -20,10 +20,11 @@ define([
 	 * or multiple selection mode; see `selectionMode`).
 	 * * Store support (limitation: to avoid graphic glitches, the updates to the
 	 * store should not be done while the native dropdown of the select is open).
-	 * The attributes of data items used for the label and value of option elements
-	 * can be customized using the `labelAttr` and `valueAttr` properties, or using
-	 * a `labelFunc` and `valueFunc` (for details, see the documentation of the
-	 * `delite/StoreMap` superclass).
+	 * The attributes of data items used for the `label`, `value`, and `disabled`
+	 * attributes of option elements can be customized using respectively the
+	 * `labelAttr`, `valueAttr`, and `disabledAttr` properties, or using
+	 * `labelFunc`, `valueFunc`, and `disabledFunc` properties (for details, see
+	 * the documentation of the `delite/StoreMap` superclass).
 	 * * Form support (inherits from `delite/FormWidget`).
 	 * * The item rendering has the limitations of the `<option>` elements of the
 	 * native `<select>`, in particular it is text-only.
@@ -156,10 +157,10 @@ define([
 			// of the focus pseudo-class because the browsers give the focus
 			// to the underlying select, not to the widget.
 			this.on("focus", function (evt) {
-				domClass.toggle(this, "d-select-focus", evt.type === "focus");
+				$(this).toggleClass("d-select-focus", evt.type === "focus");
 			}.bind(this), this.valueNode);
 			this.on("blur", function (evt) {
-				domClass.toggle(this, "d-select-focus", evt.type === "focus");
+				$(this).toggleClass("d-select-focus", evt.type === "focus");
 			}.bind(this), this.valueNode);
 			
 			// Keep delite/Selection's selectedItem/selectedItems in sync after
