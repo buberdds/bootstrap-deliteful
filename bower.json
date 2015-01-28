@@ -14,7 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "deliteful": "https://github.com/ibm-js/deliteful.git",
+    "deliteful": "https://github.com/ibm-js/deliteful.git#master",
     "bootstrap": "~3.3.2",
     "requirejs": "~2.1.15"
   }
