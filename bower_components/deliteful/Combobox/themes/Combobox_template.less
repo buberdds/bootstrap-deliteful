@@ -1,0 +1,48 @@
+.d-combobox {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	padding: 0;
+	.d-combobox-styles();
+	
+	&::after {
+		/* dropdown arrow */
+		content: "\25BC";
+		padding:0;
+		position: relative;
+		/* allow clicks to pass through */
+		pointer-events: none;
+		.d-combobox-arrow-styles();
+	}
+	&.d-rtl::after {
+		.d-combobox-arrow-styles-rtl();
+	}
+	&[dir="rtl"]::after {
+		.d-combobox-arrow-styles-rtl();
+	}
+}
+
+.d-combobox-input {
+	height: inherit;
+	
+	/* Necessary for Safari on iOS to avoid misplacement of the dropdown arrow */
+	/* due to the presence of the hidden input which stores the submitted value.*/
+	margin: 0;
+	
+	&[disabled],
+	fieldset[disabled] & {
+		opacity: 0.5;
+	}
+}
+
+.d-combobox-input, .d-combobox-popup-input {
+	.d-combobox-input-styles;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.d-combobox .d-combobox-list-hidden {
+	display: none;
+}

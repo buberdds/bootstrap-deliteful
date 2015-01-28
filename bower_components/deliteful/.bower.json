@@ -1,0 +1,38 @@
+{
+  "name": "deliteful",
+  "version": "0.5.1",
+  "dependencies": {
+    "dcl": "1.1.x",
+    "decor": "0.4.x",
+    "delite": "0.5.x",
+    "dojo": ">=1.9.1",
+    "dpointer": "0.4.x",
+    "ecma402": "0.2.x",
+    "requirejs": "2.1.x",
+    "requirejs-domready": "2.0.x",
+    "requirejs-dplugins": "0.4.x",
+    "dstore": "1.0.x"
+  },
+  "keywords": [
+    "web-components",
+    "delite",
+    "custom-elements"
+  ],
+  "ignore": [
+    ".jshintrc",
+    ".gitattributes",
+    ".travis.yml",
+    "tests",
+    "CONTRIBUTING.md"
+  ],
+  "homepage": "https://github.com/ibm-js/deliteful",
+  "_release": "0.5.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.5.1",
+    "commit": "e67812c7a46c2ee86328f3d3f815773afd3e3b6e"
+  },
+  "_source": "https://github.com/ibm-js/deliteful.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/ibm-js/deliteful.git"
+}

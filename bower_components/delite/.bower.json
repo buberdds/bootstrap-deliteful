@@ -1,0 +1,37 @@
+{
+  "name": "delite",
+  "version": "0.5.1",
+  "dependencies": {
+    "dcl": "1.1.x",
+    "decor": "0.4.x",
+    "dojo": ">=1.9.1",
+    "dpointer": "0.4.x",
+    "jquery": ">=2.1",
+    "requirejs": "2.1.x",
+    "requirejs-domready": "2.0.x",
+    "requirejs-dplugins": "0.4.x",
+    "requirejs-text": "2.0.x"
+  },
+  "devDependencies": {
+    "dstore": "1.0.x",
+    "platform": "Polymer/platform#~0.1.4",
+    "dijit": ">=1.9.1"
+  },
+  "ignore": [
+    ".jshintrc",
+    ".gitattributes",
+    ".travis.yml",
+    "tests",
+    "CONTRIBUTING.md"
+  ],
+  "homepage": "https://github.com/ibm-js/delite",
+  "_release": "0.5.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.5.1",
+    "commit": "88e89f30a1c0db5d484d53b0df384f3c4cb8a133"
+  },
+  "_source": "git://github.com/ibm-js/delite.git",
+  "_target": "0.5.x",
+  "_originalSource": "delite"
+}
