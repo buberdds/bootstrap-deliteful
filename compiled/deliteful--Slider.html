@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Bootstrap Deliteful - deliteful-Slider - again</title>
+
+		<!-- Bootstrap -->
+		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Delieful -->
+		<link rel="stylesheet" href="../../../delite/themes/defaultapp.css">
+		<script type="text/javascript" src="../../requirejs/require.js"></script>
+		<script type="text/javascript">
+			require.config({
+				baseUrl: "../.."
+			});
+		</script>
+<script type="text/javascript">
+	require([
+			"delite/register",
+
+			"deliteful/Slider",
+			"deliteful/Combobox",
+			"deliteful/Store",
+			"requirejs-domready/domReady!"
+			], function(register){
+				register.parse();
+				document.body.style.display = "";
+			});
+</script>
+</head>
+<body>
+<div class="container">
+
+
+
+
+
+	<h3>Basic forms</h3>
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+		</div>
+		<div class="form-group">
+			<label>
+
+		<d-slider></d-slider>
+
+			</label>
+		</div>
+
+
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+	<h3>Inline forms</h3>
+	<form class="form-inline">
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputEmail2">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+		</div>
+		<div class="form-group">
+			<label class="sr-only" for="exampleInputPassword2">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+		</div>
+
+
+
+		<d-slider></d-slider>
+
+			</label>
+
+			<button type="submit" class="btn btn-default">Sign in</button>
+	</form>
+	<h3>Validation states</h3> 
+	<!-- try also radio, switches, radiobuttons -->   
+
+	<div class="has-success">
+		<label>
+
+		<d-slider></d-slider>
+
+	</label>
+	</div>
+	<div class="has-error">
+		<label>
+
+		<d-slider></d-slider>
+
+	</label>
+	</div>
+	<div class="has-warning">
+		<label>
+
+		<d-slider></d-slider>
+
+	</label>
+	</div>
+
+
+	<h3>sizing</h3>
+
+
+		<d-slider></d-slider>
+
+
+
+
+		<d-slider></d-slider>
+
+
+
+
+		<d-slider></d-slider>
+
+
+</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
