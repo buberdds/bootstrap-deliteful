@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Bootstrap Deliteful - bootstrap-ResponsiveColumns - again</title>
+		<title>Bootstrap Deliteful - bootstrap-Sidepane - again</title>
 
 		<!-- Bootstrap -->
 		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
 <script type="text/javascript">
 	require([
 			"delite/register",
-			"deliteful/ResponsiveColumns",
+			"deliteful/SidePane",
 			"deliteful/Button",
 			"delite/theme!delite/themes/global.css",	// page level CSS
 			"requirejs-domready/domReady!"
@@ -48,35 +48,37 @@
 		text-align: center;
 	}
 </style>
+<d-side-pane id="sidepaneOverlayOutside" mode="overlay">
+overlay
+</d-side-pane>
+<d-side-pane id="sidepanePushOutside" mode="push">
+push
+</d-side-pane>
 <div class="container">
 	<div class="row">
-		<div class="col-md-4"> 
-			<d-responsive-columns breakpoints="{phone: '500px', other: ''}" title="inside a grid column"> <!-- inside a grid column -->
-			<div layout="{phone: '100%', other: '20%'}" style="background: #333; width: 100%">...</div>
-			<div layout="{phone: 'hidden', other: 'fill'}" style="background: tomato; width: 50%">...</div>
-			</d-responsive-columns>
+		<d-side-pane id="sidepanepushInside" mode="push">
+		push mini
+		</d-side-pane>
+		<div class="col-md-4">.col-md-4 </div>
+		<div class="col-md-4">.col-md-4</div>
+		<div class="col-md-4">.col-md-4</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">.col-md-6</div>
+		<div class="col-md-6">.col-md-6</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+
 		</div>
-		<div class="col-md-4">.col-md-4</div>
-		<div class="col-md-4">.col-md-4</div>
-	</div>
-	<d-responsive-columns breakpoints="{phone: '500px', other: ''}" title="inside a container"> <!-- inside a container -->
-	<div layout="{phone: '100%', other: '20%'}" style="background: #333; width: 100%">...</div>
-	<div layout="{phone: 'hidden', other: 'fill'}" style="background: tomato; width: 50%">...</div>
-	</d-responsive-columns>
-</div>
-<d-responsive-columns breakpoints="{phone: '500px', other: ''}" title="outside"> <!-- outside -->
-<div layout="{phone: '100%', other: '20%'}" style="background: #333; width: 100">
-	<div class="container">
-		<div class="col-md-4"> .col-md-4 </div>
-		<div class="col-md-4"> .col-md-4 </div>
-		<div class="col-md-4"> .col-md-4 </div>
 	</div>
 </div>
-<div layout="{phone: 'hidden', other: 'fill'}" style="background: tomato; width: 50%">...</div>
-</d-responsive-columns>
-
-
-
+<div class="bd-controls">
+	<button onclick="sidepaneOverlayOutside.toggle()"> toggle outer sidepane as overlay </button>
+	<button onclick="sidepanePushOutside.toggle()"> toggle outer sidepane as push </button>
+	<button onclick="sidepanepushInside.toggle()"> toggle inner sidepane as push </button>
+</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

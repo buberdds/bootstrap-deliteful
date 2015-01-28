@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Bootstrap Deliteful - bootstrap-StarRating - again</title>
+		<title>Bootstrap Deliteful - bootstrap-Checkbox - again</title>
 
 		<!-- Bootstrap -->
 		<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
 <script type="text/javascript">
 	require([
 			"delite/register",
-			"deliteful/StarRating",
+			"deliteful/Checkbox",
 			"requirejs-domready/domReady!"
 			], function(register){
 				register.parse();
@@ -30,35 +30,40 @@
 </head>
 <body>
 		<div class="container">
-
 			<h3>Stacked</h3>
-			<div class="">
+			<div class="checkbox">
 				<label>
-					<d-star-rating></d-star-rating> 
+					<input type="checkbox" >
+					Option 1
 				</label>
 			</div>
-			<div class="">
+			<div class="checkbox">
 				<label>
-					<d-star-rating></d-star-rating> 
+					<input type="checkbox" checked>
+					Option 2
 				</label>
 			</div>
-			<div class="disabled">
+			<div class="checkbox disabled">
 				<label>
-					<d-star-rating disabled></d-star-rating> 
+					<input type="checkbox" disabled>
+					Option 3
 				</label>
 			</div>
 			<h3>Inline</h3>
-			<label class="">
-				<d-star-rating></d-star-rating> 
+			<label class="checkbox-inline">
+				<input type="checkbox" >
+				Option 1
 			</label>
-			<label class="">
-				<d-star-rating></d-star-rating> 
+			<label class="checkbox-inline">
+				<input type="checkbox" checked>
+				Option 2
 			</label>
-			<label class="disabled">
-				<d-star-rating disabled></d-star-rating> 
+			<label class="checkbox-inline">
+				<input type="checkbox" disabled>
+				Option 3
 			</label>
 
-			<h3>Basic forms</h3> 
+			<h3>Basic forms</h3>
 			<form>
 				<div class="form-group">
 					<label for="exampleInputEmail1">Email address</label>
@@ -68,10 +73,9 @@
 					<label for="exampleInputPassword1">Password</label>
 					<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
 				</div>
-				<div class="">
+				<div class="checkbox">
 					<label>
-						<d-star-rating></d-star-rating>
-						Rate me
+						<input type="checkbox"> Check me out
 					</label>
 				</div>
 				<button type="submit" class="btn btn-default">Submit</button>
@@ -86,13 +90,40 @@
 					<label class="sr-only" for="exampleInputPassword2">Password</label>
 					<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
 				</div>
-				<div class="">
+				<div class="checkbox">
 					<label>
-						<d-star-rating></d-star-rating> Rate me
+						<input type="checkbox"> Remember me
 					</label>
 				</div>
 				<button type="submit" class="btn btn-default">Sign in</button>
 			</form>
+			<h3>Validation states</h3>
+			<!-- try also checkbox, switches, radiobuttons -->
+			<div class="has-success">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="checkboxSuccess" value="option1"> 
+						Checkbox with success
+					</label>
+				</div>
+			</div>
+			<div class="has-warning">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="checkboxWarning" value="option1">
+						Checkbox with warning
+					</label>
+				</div>
+			</div>
+			<div class="has-error">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="checkboxError" value="option1">
+						Checkbox with error
+
+					</label>
+				</div>
+			</div>
 
 
 			<h3>sizing</h3>
