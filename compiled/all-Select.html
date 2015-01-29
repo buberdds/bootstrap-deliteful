@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Bootstrap Deliteful -  - again</title>
+
+	<!-- Bootstrap -->
+	<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Delieful -->
+	<link rel="stylesheet" href="../bower_components/delite/themes/defaultapp.css">
+	<script type="text/javascript" src="../bower_components/requirejs/require.js"></script>
+	<script type="text/javascript">
+		require.config({
+			baseUrl: "../bower_components"
+		});
+	</script>
+	<style>
+		.hidden {
+			display: none;
+		}
+		.current {
+			background: black;
+			color: white;
+		}
+		a {
+			padding: .5em;
+			display: inline-block;
+		}
+		.label {
+			position: absolute;
+		}
+	</style>
+</head>
+<body style="height: 95%">
+	<header>
+	<a href="all-Button.html" class="" >Button</a>
+	<a href="all-Checkbox.html" class="" >Checkbox</a>
+	<a href="all-Combobox.html" class="" >Combobox</a>
+	<a href="all-LinearLayout.html" class="" >LinearLayout</a>
+	<a href="all-List-PageableList.html" class="" >List-PageableList</a>
+	<a href="all-ProgressBar.html" class="" >ProgressBar</a>
+	<a href="all-RadioButton.html" class="" >RadioButton</a>
+	<a href="all-ResponsiveColumns.html" class="" >ResponsiveColumns</a>
+	<a href="all-ScrollableContainer.html" class="" >ScrollableContainer</a>
+	<a href="all-Select.html" class="current" >Select</a>
+	<a href="all-Sidepane.html" class="" >Sidepane</a>
+	<a href="all-Slider.html" class="" >Slider</a>
+	<a href="all-StarRating.html" class="" >StarRating</a>
+	<a href="all-SwapView.html" class="" >SwapView</a>
+	<a href="all-Switch.html" class="" >Switch</a>
+	<a href="all-ToggleButton.html" class="" >ToggleButton</a>
+	<a href="all-ViewStack.html" class="" >ViewStack</a>
+	</header>
+
+	<span class="label label-default">bootstrap widget</span>
+	<iframe style="width: 49%; height: 100%" src="bootstrap--Select.html"></iframe>
+	<span class="label label-primary">deliteful widget</span>
+	<iframe style="width: 49%; height: 100%" src="deliteful--Select.html"></iframe>
+</body>
+</html>
