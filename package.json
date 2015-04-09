@@ -13,5 +13,8 @@
     "list-directory-contents": "0.0.3",
     "lodash": "~2.4.1",
     "rimraf": "~2.2.8"
+  },
+  "devDependencies": {
+    "handlebars": "^3.0.1"
   }
 }
